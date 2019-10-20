@@ -30,13 +30,13 @@ def create_app():
         return render_template("index.html")
 
     @app.route('/audio/all')
-    def available_audio():
+    def get_audio():
         audio_files = os.listdir(app.config['AUDIO_PATH'])
 
         return jsonify(audio_files)
 
     @app.route('/audio/<name>')
-    def audio(name):
+    def get_audio_with_name(name):
         return send_from_directory(app.config['AUDIO_PATH'], name, conditional=True)
 
 
