@@ -34,16 +34,7 @@ def create_app():
 
     @app.route('/languages/all')
     def get_all_languages():
-        languages = [
-            {
-                'code': 'et',
-                'name': 'Estonian'
-            },
-            {
-                'code': 'en',
-                'name': 'English'
-            },
-        ]
+        languages = app.config['AVAILABLE_LANGUAGES']
 
         return jsonify(languages)
 
