@@ -17,3 +17,6 @@ class Config(object):
     #     }
     #     ...
     # ]
+
+    # How many audio files to display on page
+    ITEMS_ON_PAGE = 10

@@ -1,5 +1,6 @@
 import os
 import json
+import random
 from json.decoder import JSONDecodeError
 
 from flask import Flask, render_template
@@ -44,7 +45,33 @@ def create_app():
 
         data = [{'file_name': a} for a in audio_files]
 
-        return jsonify(data)
+        json_file_name = app.config['DATA_PATH'] + lang + '.json'
+
+        if os.path.isfile(json_file_name):
+            with open(json_file_name) as json_file:
+                try:
+                    json_data = json.load(json_file)
+                except JSONDecodeError:
+                    json_data = {}
+                    json_data['validatedAudio'] = []
+        else:
+            json_data = {}
+            json_data['validatedAudio'] = []
+
+        validated_file_names = json_data['validatedAudio']
+
+        not_validated_audio_files = []
+
+        random.shuffle(audio_files)
+
+        for audio_file in audio_files:
+            if len(not_validated_audio_files) == app.config['ITEMS_ON_PAGE']:
+                break
+
+            if not any(v['file_name'] == audio_file for v in validated_file_names):
+                not_validated_audio_files.append({'file_name': audio_file})
+
+        return jsonify(not_validated_audio_files)
 
     @app.route('/audio/validated', methods=['GET', 'POST'])
     def save_validated_audio():
@@ -52,18 +79,16 @@ def create_app():
 
         json_file_name = app.config['DATA_PATH'] + data['lang'] + '.json'
 
-        if os.path.isfile(json_file_name):
+        if not os.path.isfile(json_file_name):
+            json_data = {}
+            json_data['validatedAudio'] = []
+        else:
             with open(json_file_name) as json_file:
                 try:
                     json_data = json.load(json_file)
                 except JSONDecodeError:
-                    no_file = True
-        else:
-            no_file = True
-
-        if no_file:
-            json_data = {}
-            json_data['validatedAudio'] = []
+                    json_data = {}
+                    json_data['validatedAudio'] = []
 
         json_data['validatedAudio'] = json_data['validatedAudio'] +  data['data']
 
