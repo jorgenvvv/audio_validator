@@ -13,8 +13,8 @@ Vue.use(VueRouter)
 Vue.prototype.$API_URL = process.env.VUE_APP_API_URL
 
 const routes = [
-  { path: '/', component: LanguageSelect },
-  { path: '/:lang/validate', component: AudioValidator }
+ { path: '/', name: 'home', component: LanguageSelect },
+ { path: '/:lang/validate', name: 'audiovalidator', component: AudioValidator }
 ]
 
 const router = new VueRouter({

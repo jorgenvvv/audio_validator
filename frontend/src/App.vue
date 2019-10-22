@@ -7,6 +7,8 @@
         </router-link>
       </v-toolbar-title>
       <v-spacer></v-spacer>
+      <span class="mr-3" v-if="$route.params.lang">Language: {{ $route.params.lang }}</span>
+      <v-btn v-if="$route.name === 'audiovalidator'" to="/" small>Change language</v-btn>
     </v-app-bar>
 
     <v-content>
