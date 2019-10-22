@@ -4,7 +4,12 @@
       <v-list-item-group color="primary">
         <v-list-item v-for="lang in availableLanguages" :key="lang.code" @click="chooseLanguage(lang.code)">
           <v-list-item-content>
-            <v-list-item-title>{{ lang.name }}</v-list-item-title>
+            <v-list-item-title>{{ lang.name }} ({{ lang.validated }} / {{ lang.total }})</v-list-item-title>
+            <v-list-item-subtitle>
+              <v-progress-linear :value="validatedPercentage(lang.total, lang.validated)" height="25">
+                <strong>{{ validatedPercentage(lang.total, lang.validated) }}%</strong>
+              </v-progress-linear>
+            </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
       </v-list-item-group>
@@ -32,6 +37,10 @@ export default {
   methods: {
     chooseLanguage(code) {
       this.$router.push(`${code}/validate`);
+    },
+
+    validatedPercentage(total, validated) {
+      return (validated / total * 100).toFixed(1);
     }
   }
 };
