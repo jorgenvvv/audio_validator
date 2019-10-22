@@ -5,3 +5,6 @@ class Config(object):
     
     # Path where audio files are stored
     # AUDIO_PATH = ''
+
+    # Path where audio validator can save its data
+    # DATA_PATH = ''
