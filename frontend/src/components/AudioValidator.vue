@@ -1,5 +1,8 @@
 <template>
   <v-container>
+    <v-alert v-if="audioFiles.length === 0" border="top" colored-border type="info" elevation="2">
+      There is no more audio to validate for current language.
+    </v-alert>
     <v-card class="pa-2" v-if="audioFiles.length > 0">
       <v-alert v-if="invalidFields" dense outlined type="error">
         A spoken language has to be chosen for all audio clips.
@@ -114,7 +117,7 @@ export default {
           a.valid = false;
         }
 
-        return a
+        return a;
       });
 
       this.invalidFields = true;
@@ -132,10 +135,10 @@ export default {
           .then(() => {
             this.invalidFields = false;
             this.loadAudio();
-            window.scrollTo(0,0);
+            window.scrollTo(0, 0);
           });
       } else {
-        window.scrollTo(0,0);
+        window.scrollTo(0, 0);
       }
     }
   }
