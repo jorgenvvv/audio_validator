@@ -10,7 +10,6 @@
 
       <v-row v-for="file of audioFiles" :key="file.file_name">
         <v-col cols="4">
-          <p>{{ file.file_name }}</p>
           <audio controls>
             <source
               :src="
