@@ -57,11 +57,11 @@ def create_app():
                 try:
                     json_data = json.load(json_file)
                 except JSONDecodeError:
-                    print('invalid file')
-
-                    json_data = {}
-                    json_data['validatedAudio'] = []
+                    no_file = True
         else:
+            no_file = True
+
+        if no_file:
             json_data = {}
             json_data['validatedAudio'] = []
 
