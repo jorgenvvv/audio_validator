@@ -10,7 +10,7 @@
 
       <v-row v-for="file of audioFiles" :key="file.file_name">
         <v-col cols="4">
-          <audio controls>
+          <audio controls :ref="file.file_name" @play="pauseOtherAudios(file.file_name)">
             <source
               :src="
                 `${$API_URL}/audio/${$route.params.lang}/${encodeURIComponent(
@@ -78,6 +78,13 @@ export default {
             f => !f.file_name.endsWith('info.json')
           );
         });
+    },
+
+    pauseOtherAudios(currentFile) {
+      this.audioFiles.forEach(a => {
+        if (a.file_name !== currentFile)
+          this.$refs[a.file_name][0].pause();
+      });
     },
 
     validateAnswers() {
