@@ -126,6 +126,18 @@ export default {
 
     saveValidatedAudio() {
       if (this.validateAnswers()) {
+        if (sessionStorage.getItem('userName'))
+          this.audioFiles.forEach(f => {
+            this.$set(f, 'validated_by', sessionStorage.getItem('userName'));
+          });
+        else
+          this.audioFiles.forEach(f => this.$set(f, 'validated_by', 'UNKNOWN'));
+
+        let currentDateTime = new Date();
+        this.audioFiles.forEach(f => {
+          this.$set(f, 'validated_at', currentDateTime.toISOString());
+        });
+
         axios
           .post(process.env.VUE_APP_API_URL + '/audio/validated', {
             lang: this.$route.params.lang,
