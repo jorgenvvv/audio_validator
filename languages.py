@@ -9,6 +9,10 @@ from flask_cors import CORS
 
 languages = Blueprint('languages', __name__)
 
+@languages.route('/languages/validationoptions')
+def get_validation_options():
+    return jsonify(app.config['VALIDATION_LANGUAGES'])
+
 @languages.route('/languages/all')
 def get_all_languages():
     available_languages = app.config['AVAILABLE_LANGUAGES']

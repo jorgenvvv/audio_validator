@@ -23,47 +23,12 @@
         </v-col>
         <v-col cols="8">
           <v-row>
-            <v-checkbox
+            <v-checkbox v-for="language in validationLanguageOptions" :key="language.code"
               class="mx-2"
               v-model="file.languages"
-              value="en"
+              :value="language.code"
               multiple
-              label="English"
-            ></v-checkbox>
-            <v-checkbox
-              class="mx-2"
-              v-model="file.languages"
-              value="fr"
-              multiple
-              label="French"
-            ></v-checkbox>
-            <v-checkbox
-              class="mx-2"
-              v-model="file.languages"
-              value="ge"
-              multiple
-              label="German"
-            ></v-checkbox>
-            <v-checkbox
-              class="mx-2"
-              v-model="file.languages"
-              value="et"
-              multiple
-              label="Estonian"
-            ></v-checkbox>
-            <v-checkbox
-              class="mx-2"
-              v-model="file.languages"
-              value="ru"
-              multiple
-              label="Russian"
-            ></v-checkbox>
-            <v-checkbox
-              class="mx-2"
-              v-model="file.languages"
-              value="other"
-              multiple
-              label="Other"
+              :label="language.name"
             ></v-checkbox>
           </v-row>
         </v-col>
@@ -81,16 +46,25 @@ import axios from 'axios';
 export default {
   data() {
     return {
+      validationLanguageOptions: [],
       audioFiles: [],
       invalidFields: false
     };
   },
 
   created() {
+    this.loadValidationLanguageOptions();
     this.loadAudio();
   },
 
   methods: {
+    loadValidationLanguageOptions() {
+      axios.get(process.env.VUE_APP_API_URL + '/languages/validationoptions')
+        .then(response => {
+          this.validationLanguageOptions = response.data;
+        })
+    },
+
     loadAudio() {
       axios
         .get(

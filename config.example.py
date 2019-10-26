@@ -18,5 +18,49 @@ class Config(object):
     #     ...
     # ]
 
+    # Languages that are displayed as checkboxes on the validation page
+    VALIDATION_LANGUAGES = [
+        {
+            'code': 'et',
+            'name': 'Estonian'
+        },
+        {
+            'code': 'en',
+            'name': 'English'
+        },
+        {
+            'code': 'fi',
+            'name': 'Finnish'
+        },
+        {
+            'code': 'ur',
+            'name': 'Urdu'
+        },
+        {
+            'code': 'de',
+            'name': 'German'
+        },
+        {
+            'code': 'es',
+            'name': 'Spanish'
+        },
+        {
+            'code': 'lv',
+            'name': 'Latvian'
+        },
+        {
+            'code': 'ru',
+            'name': 'Russian'
+        },
+        {
+            'code': 'OTHER',
+            'name': 'Other'
+        },
+        {
+            'code': 'NO_LANGUAGE',
+            'name': 'No language'
+        }
+    ]
+
     # How many audio files to display on page
     ITEMS_ON_PAGE = 10
