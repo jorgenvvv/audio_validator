@@ -39,7 +39,10 @@ def get_audio(lang):
             break
 
         if not any(v['file_name'] == audio_file for v in validated_file_names):
-            not_validated_audio_files.append({'file_name': audio_file})
+            with open(os.path.join(app.config['AUDIO_PATH'] + lang, os.path.splitext(audio_file)[0] + '.info.json')) as json_file:
+                json_metadata = json.load(json_file)
+                
+            not_validated_audio_files.append({'file_name': audio_file, 'metadata': json_metadata})
 
     return jsonify(not_validated_audio_files)
 

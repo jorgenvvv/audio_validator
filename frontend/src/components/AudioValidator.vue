@@ -10,21 +10,30 @@
 
       <v-row v-for="file of audioFiles" :key="file.file_name">
         <v-col cols="4">
-          <audio controls :ref="file.file_name" @play="pauseOtherAudios(file.file_name)">
-            <source
-              :src="
-                `${$API_URL}/audio/${$route.params.lang}/${encodeURIComponent(
-                  file.file_name
-                )}`
-              "
-            />
-            Your browser does not support the audio element.
-          </audio>
+          <v-row class="pl-6 py-1">
+            {{ file.metadata.title }}
+          </v-row>
+          <v-row class="pl-6">
+            <v-row>
+            <div>
+              <audio controls :ref="file.file_name" @play="pauseOtherAudios(file.file_name)">
+                <source
+                  :src="
+                    `${$API_URL}/audio/${$route.params.lang}/${encodeURIComponent(
+                      file.file_name
+                    )}`
+                  "
+                />
+                Your browser does not support the audio element.
+              </audio> 
+            </div>
+          </v-row>
+          </v-row>
         </v-col>
         <v-col cols="8">
           <v-row>
             <v-checkbox v-for="language in validationLanguageOptions" :key="language.code"
-              class="mx-2"
+              class="ma-0 mx-2"
               v-model="file.languages"
               :value="language.code"
               multiple
