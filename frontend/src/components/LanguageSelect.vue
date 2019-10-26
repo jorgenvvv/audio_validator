@@ -14,7 +14,7 @@
     </v-list>
 
 
-  <v-row justify="center">
+  <v-row justify="center" ref="languageSelectModal">
     <v-dialog v-model="dialog" persistent max-width="600px">
       <v-card>
         <v-card-title>
