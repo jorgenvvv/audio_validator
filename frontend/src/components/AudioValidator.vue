@@ -1,6 +1,12 @@
 <template>
   <v-container>
-    <v-alert v-if="audioFiles.length === 0" border="top" colored-border type="info" elevation="2">
+    <v-alert
+      v-if="audioFiles.length === 0"
+      border="top"
+      colored-border
+      type="info"
+      elevation="2"
+    >
       There is no more audio to validate for current language.
     </v-alert>
     <v-card class="pa-2" v-if="audioFiles.length > 0">
@@ -15,24 +21,30 @@
           </v-row>
           <v-row class="pl-6">
             <v-row>
-            <div>
-              <audio controls :ref="file.file_name" @play="pauseOtherAudios(file.file_name)">
-                <source
-                  :src="
-                    `${$API_URL}/audio/${$route.params.lang}/${encodeURIComponent(
-                      file.file_name
-                    )}`
-                  "
-                />
-                Your browser does not support the audio element.
-              </audio> 
-            </div>
-          </v-row>
+              <div>
+                <audio
+                  controls
+                  :ref="file.file_name"
+                  @play="pauseOtherAudios(file.file_name)"
+                >
+                  <source
+                    :src="
+                      `${$API_URL}/audio/${
+                        $route.params.lang
+                      }/${encodeURIComponent(file.file_name)}`
+                    "
+                  />
+                  Your browser does not support the audio element.
+                </audio>
+              </div>
+            </v-row>
           </v-row>
         </v-col>
         <v-col cols="8">
           <v-row>
-            <v-checkbox v-for="language in validationLanguageOptions" :key="language.code"
+            <v-checkbox
+              v-for="language in validationLanguageOptions"
+              :key="language.code"
               class="ma-0 mx-2"
               v-model="file.languages"
               :value="language.code"
@@ -45,6 +57,13 @@
       <div class="d-flex flex-row-reverse">
         <v-btn color="primary" @click="saveValidatedAudio()">Save</v-btn>
       </div>
+
+      <v-snackbar v-model="snackbar" timeout="3000" color="success">
+        Saved successfully.
+        <v-btn dark text @click="snackbar = false">
+          Close
+        </v-btn>
+      </v-snackbar>
     </v-card>
   </v-container>
 </template>
@@ -57,7 +76,8 @@ export default {
     return {
       validationLanguageOptions: [],
       audioFiles: [],
-      invalidFields: false
+      invalidFields: false,
+      snackbar: false
     };
   },
 
@@ -68,10 +88,11 @@ export default {
 
   methods: {
     loadValidationLanguageOptions() {
-      axios.get(process.env.VUE_APP_API_URL + '/languages/validationoptions')
+      axios
+        .get(process.env.VUE_APP_API_URL + '/languages/validationoptions')
         .then(response => {
           this.validationLanguageOptions = response.data;
-        })
+        });
     },
 
     loadAudio() {
@@ -91,8 +112,7 @@ export default {
 
     pauseOtherAudios(currentFile) {
       this.audioFiles.forEach(a => {
-        if (a.file_name !== currentFile)
-          this.$refs[a.file_name][0].pause();
+        if (a.file_name !== currentFile) this.$refs[a.file_name][0].pause();
       });
     },
 
@@ -134,6 +154,7 @@ export default {
             data: this.audioFiles
           })
           .then(() => {
+            this.snackbar = true;
             this.invalidFields = false;
             this.loadAudio();
             window.scrollTo(0, 0);
