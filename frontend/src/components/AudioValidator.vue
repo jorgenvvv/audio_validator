@@ -21,48 +21,51 @@
         A spoken language has to be chosen for all audio clips.
       </v-alert>
 
-      <v-row v-for="file of audioFiles" :key="file.file_name">
-        <v-col cols="4">
-          <v-row class="pl-6 py-1">
-            {{ file.metadata.title }}
-          </v-row>
-          <v-row class="pl-6">
-            <v-row>
-              <div>
-                <audio
-                  controls
-                  :ref="file.file_name"
-                  @play="pauseOtherAudios(file.file_name)"
-                >
-                  <source
-                    :src="
-                      `${$API_URL}/audio/${
-                        $route.params.lang
-                      }/${encodeURIComponent(file.file_name)}`
-                    "
-                  />
-                  Your browser does not support the audio element.
-                </audio>
-              </div>
+      <div v-for="file of audioFiles" :key="file.file_name">
+        <v-row>
+          <v-col cols="4">
+            <v-row class="pl-6 py-1" v-if="file.metadata">
+              {{ file.metadata.title }}
             </v-row>
-          </v-row>
-        </v-col>
-        <v-col cols="8">
-          <v-row>
-            <v-checkbox
-              v-for="language in validationLanguageOptions"
-              :key="language.code"
-              class="ma-0 mx-2"
-              v-model="file.languages"
-              :value="language.code"
-              multiple
-              :label="language.name"
-            ></v-checkbox>
-          </v-row>
-        </v-col>
-      </v-row>
+            <v-row class="pl-6">
+              <v-row>
+                <div>
+                  <audio
+                    controls
+                    :ref="file.file_name"
+                    @play="pauseOtherAudios(file.file_name)"
+                  >
+                    <source
+                      :src="
+                        `${$API_URL}/audio/${
+                          $route.params.lang
+                        }/${encodeURIComponent(file.file_name)}`
+                      "
+                    />
+                    Your browser does not support the audio element.
+                  </audio>
+                </div>
+              </v-row>
+            </v-row>
+          </v-col>
+          <v-col cols="8">
+            <v-row>
+              <v-checkbox
+                v-for="language in validationLanguageOptions"
+                :key="language.code"
+                class="ma-0 mx-2"
+                v-model="file.languages"
+                :value="language.code"
+                multiple
+                :label="language.name"
+              ></v-checkbox>
+            </v-row>
+          </v-col>
+        </v-row>
+        <v-divider></v-divider>
+      </div>
       <div class="d-flex flex-row-reverse">
-        <v-btn color="primary" @click="saveValidatedAudio()">Save</v-btn>
+        <v-btn class="ma-4" color="primary" @click="saveValidatedAudio()">Save</v-btn>
       </div>
 
       <v-snackbar v-model="snackbar" :timeout="3000" color="success">
@@ -91,13 +94,17 @@ export default {
 
   created() {
     this.loading = true;
-    this.loadValidationLanguageOptions();
-    this.loadAudio();
+    axios.all([
+      this.loadValidationLanguageOptions(),
+      this.loadAudio()
+    ]).then(() => {
+      this.loading = false;
+    })
   },
 
   methods: {
     loadValidationLanguageOptions() {
-      axios
+      return axios
         .get(process.env.VUE_APP_API_URL + '/languages/validationoptions')
         .then(response => {
           this.validationLanguageOptions = response.data;
@@ -105,7 +112,7 @@ export default {
     },
 
     loadAudio() {
-      axios
+      return  axios
         .get(
           process.env.VUE_APP_API_URL +
             '/audio/' +
@@ -116,7 +123,6 @@ export default {
           this.audioFiles = response.data.filter(
             f => !f.file_name.endsWith('info.json')
           );
-          this.loading = false;
         });
     },
 
@@ -133,7 +139,6 @@ export default {
       this.audioFiles = this.audioFiles.map(a => {
         if (!a.hasOwnProperty('languages') || a.languages.length === 0) {
           allValid = false;
-          a.valid = false;
         }
 
         return a;
@@ -156,6 +161,8 @@ export default {
         let currentDateTime = new Date();
         this.audioFiles.forEach(f => {
           this.$set(f, 'validated_at', currentDateTime.toISOString());
+          this.$set(f, 'video_id', f.metadata.id);
+          this.$set(f, 'video_title', f.metadata.title);
           delete f['metadata'];
         });
 
@@ -168,9 +175,10 @@ export default {
           .then(() => {
             this.snackbar = true;
             this.invalidFields = false;
-            this.loadAudio();
-            window.scrollTo(0, 0);
-            this.loading = false;
+            this.loadAudio().then(() => {
+              this.loading = false
+              window.scrollTo(0, 0);
+            });
           });
       } else {
         window.scrollTo(0, 0);
