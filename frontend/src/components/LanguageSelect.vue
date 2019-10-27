@@ -69,8 +69,10 @@ export default {
     },
 
     saveName() {
-      sessionStorage.setItem('userName', this.userName);
-      this.chooseLanguage();
+      if (this.userName) {
+        sessionStorage.setItem('userName', this.userName);
+        this.chooseLanguage();
+      }
     },
 
     chooseLanguage() {

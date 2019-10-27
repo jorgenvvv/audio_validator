@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar dense>
+    <v-app-bar app dense>
       <v-toolbar-title class="headline text-uppercase">
         <router-link to="/">
           <span>Audio validator</span>
