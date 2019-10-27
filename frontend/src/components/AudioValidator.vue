@@ -9,6 +9,13 @@
     >
       There is no more audio to validate for current language.
     </v-alert>
+    <v-overlay :value="loading">
+      <v-progress-circular
+        :size="50"
+        color="primary"
+        indeterminate
+      ></v-progress-circular>
+    </v-overlay>
     <v-card class="pa-2" v-if="audioFiles.length > 0">
       <v-alert v-if="invalidFields" dense outlined type="error">
         A spoken language has to be chosen for all audio clips.
@@ -58,7 +65,7 @@
         <v-btn color="primary" @click="saveValidatedAudio()">Save</v-btn>
       </div>
 
-      <v-snackbar v-model="snackbar" timeout="3000" color="success">
+      <v-snackbar v-model="snackbar" :timeout="3000" color="success">
         Saved successfully.
         <v-btn dark text @click="snackbar = false">
           Close
@@ -77,11 +84,13 @@ export default {
       validationLanguageOptions: [],
       audioFiles: [],
       invalidFields: false,
-      snackbar: false
+      snackbar: false,
+      loading: false
     };
   },
 
   created() {
+    this.loading = true;
     this.loadValidationLanguageOptions();
     this.loadAudio();
   },
@@ -107,6 +116,7 @@ export default {
           this.audioFiles = response.data.filter(
             f => !f.file_name.endsWith('info.json')
           );
+          this.loading = false;
         });
     },
 
@@ -129,7 +139,7 @@ export default {
         return a;
       });
 
-      this.invalidFields = true;
+      this.invalidFields = !allValid;
 
       return allValid;
     },
@@ -148,6 +158,7 @@ export default {
           this.$set(f, 'validated_at', currentDateTime.toISOString());
         });
 
+        this.loading = true;
         axios
           .post(process.env.VUE_APP_API_URL + '/audio/validated', {
             lang: this.$route.params.lang,
@@ -158,6 +169,7 @@ export default {
             this.invalidFields = false;
             this.loadAudio();
             window.scrollTo(0, 0);
+            this.loading = false;
           });
       } else {
         window.scrollTo(0, 0);
