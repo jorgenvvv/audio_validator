@@ -156,6 +156,7 @@ export default {
         let currentDateTime = new Date();
         this.audioFiles.forEach(f => {
           this.$set(f, 'validated_at', currentDateTime.toISOString());
+          delete f['metadata'];
         });
 
         this.loading = true;
