@@ -63,7 +63,12 @@ def save_validated_audio():
                 json_data = {}
                 json_data['validatedAudio'] = []
 
-    json_data['validatedAudio'] = json_data['validatedAudio'] +  data['data']
+
+    for d in data['data']:
+        if any(a['video_id'] == d['video_id'] for a in json_data['validatedAudio']):
+            continue
+
+        json_data['validatedAudio'].append(d)
 
     with open(json_file_name, "w") as json_file:
         json.dump(json_data, json_file)

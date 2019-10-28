@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-alert
-      v-if="audioFiles.length === 0"
+      v-if="audioFiles.length === 0 && !loading"
       border="top"
       colored-border
       type="info"
@@ -93,6 +93,10 @@ export default {
   },
 
   created() {
+    if (!sessionStorage.getItem('userName')) {
+      this.$router.push('/');
+    }
+
     this.loading = true;
     axios.all([
       this.loadValidationLanguageOptions(),
