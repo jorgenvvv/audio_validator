@@ -21,7 +21,7 @@
         A spoken language has to be chosen for all audio clips.
       </v-alert>
 
-      <div v-for="file of audioFiles" :key="file.file_name">
+      <div :class="file.languages && file.languages.length > 0 ? validatedClasses : ''" v-for="file of audioFiles" :key="file.file_name">
         <v-row @keyup.68="selectCurrentLanguageOption(file)" @keyup.78="playNextAudio(file.file_name)">
           <v-col cols="4">
             <v-row class="pl-6 py-1" v-if="file.metadata">
@@ -120,6 +120,12 @@ export default {
     }
   },
 
+  computed: {
+    validatedClasses() {
+      return ['grey', 'lighten-5'];
+    }
+  },
+
   methods: {
     loadValidationLanguageOptions() {
       return axios
@@ -210,6 +216,8 @@ export default {
 
       if (!file.languages.includes(this.$route.params.lang)) {
         file.languages.push(this.$route.params.lang);
+      } else {
+        file.languages = file.languages.filter(l => l !== this.$route.params.lang);
       }
     },
 
