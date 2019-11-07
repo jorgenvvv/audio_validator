@@ -22,7 +22,7 @@
       </v-alert>
 
       <div v-for="file of audioFiles" :key="file.file_name">
-        <v-row>
+        <v-row @keyup.68="selectCurrentLanguageOption(file)" @keyup.78="playNextAudio(file.file_name)">
           <v-col cols="4">
             <v-row class="pl-6 py-1" v-if="file.metadata">
               <v-col class="pa-0">
@@ -201,6 +201,28 @@ export default {
       } else {
         window.scrollTo(0, 0);
       }
+    },
+
+    selectCurrentLanguageOption(file) {
+      if (!file.hasOwnProperty('languages')) {
+        this.$set(file, 'languages', []);
+      }
+
+      if (!file.languages.includes(this.$route.params.lang)) {
+        file.languages.push(this.$route.params.lang);
+      }
+    },
+
+    playNextAudio(currentFileName) {
+      this.audioFiles.forEach((a, i) => {
+        if (a.file_name === currentFileName) {
+          if (i+1 < this.audioFiles.length) {
+            this.$refs[a.file_name][0].pause();
+            this.$refs[this.audioFiles[i+1].file_name][0].focus();
+            this.$refs[this.audioFiles[i+1].file_name][0].play();
+          }
+        }
+      });
     }
   }
 };
