@@ -25,7 +25,10 @@
         <v-row>
           <v-col cols="4">
             <v-row class="pl-6 py-1" v-if="file.metadata">
-              {{ file.metadata.title }}
+              <v-col class="pa-0">
+                <div>{{ file.metadata.title }}</div>
+                <div class="caption">Segment: {{ file.file_name | getSegment }}</div>
+              </v-col>
             </v-row>
             <v-row class="pl-6">
               <v-row>
@@ -104,6 +107,17 @@ export default {
     ]).then(() => {
       this.loading = false;
     })
+  },
+
+  filters: {
+    getSegment: function (value) {
+      if (!value) return 'Unknown';
+
+      value = value.toString()
+      let fileNameWithoutExtension = value.replace(/\.[^/.]+$/, "");
+      let segmentString = fileNameWithoutExtension.split('---')[1];
+      return segmentString;
+    }
   },
 
   methods: {

@@ -39,7 +39,9 @@ def get_audio(lang):
             break
 
         if not any(v['file_name'] == audio_file for v in validated_file_names):
-            with open(os.path.join(app.config['AUDIO_PATH'] + lang, os.path.splitext(audio_file)[0] + '.info.json')) as json_file:
+            audio_file_name = os.path.splitext(audio_file)[0]
+            metadata_file_name = audio_file_name.split('__')[0] + '.info.json'
+            with open(os.path.join(app.config['AUDIO_PATH'] + lang, metadata_file_name)) as json_file:
                 json_metadata = json.load(json_file)
                 
             not_validated_audio_files.append({'file_name': audio_file, 'metadata': json_metadata})
@@ -65,7 +67,7 @@ def save_validated_audio():
 
 
     for d in data['data']:
-        if any(a['video_id'] == d['video_id'] for a in json_data['validatedAudio']):
+        if any(a['file_name'] == d['file_name'] for a in json_data['validatedAudio']):
             continue
 
         json_data['validatedAudio'].append(d)
