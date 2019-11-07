@@ -3,5 +3,6 @@ module.exports = {
   "assetsDir": "static",
   "transpileDependencies": [
     "vuetify"
-  ]
+  ],
+  "publicPath": "/lid_validate/"
 }
