@@ -6,6 +6,7 @@ from json.decoder import JSONDecodeError
 from flask import (Flask, jsonify, render_template, request, send_file,
                    send_from_directory)
 from flask_cors import CORS
+from flask_jwt_extended import JWTManager
 
 from audio_validator.config import Config
 
@@ -26,6 +27,8 @@ def create_app():
 
     app.config.from_object(config.Config)
 
+    jwt = JWTManager(app)
+
     try:
         os.makedirs(app.instance_path)
     except OSError:
@@ -34,6 +37,5 @@ def create_app():
     @app.route('/')
     def index():
         return render_template('index.html')
-
 
     return app

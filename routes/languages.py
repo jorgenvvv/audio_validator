@@ -6,14 +6,18 @@ from flask import Blueprint, Flask
 from flask import current_app as app
 from flask import jsonify, send_file, send_from_directory
 from flask_cors import CORS
+from flask_jwt_extended import jwt_required
 
 languages = Blueprint('languages', __name__)
+
 
 @languages.route('/languages/validationoptions')
 def get_validation_options():
     return jsonify(app.config['VALIDATION_LANGUAGES'])
 
+
 @languages.route('/languages/all')
+@jwt_required
 def get_all_languages():
     available_languages = app.config['AVAILABLE_LANGUAGES']
 

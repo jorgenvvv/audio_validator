@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-list>
-      <v-list-item v-for="lang in availableLanguages" :key="lang.code" @click="enterName(lang.code)">
+      <v-list-item v-for="lang in availableLanguages" :key="lang.code">
         <v-list-item-content>
           <v-list-item-title>{{ lang.name }} ({{ lang.validated }} / {{ lang.total }})</v-list-item-title>
           <v-list-item-subtitle>
@@ -12,29 +12,6 @@
         </v-list-item-content>
       </v-list-item>
     </v-list>
-
-
-  <v-row justify="center" ref="languageSelectModal">
-    <v-dialog v-model="dialog" persistent max-width="600px">
-      <v-card>
-        <v-card-title>
-          <span class="headline">Please enter your name</span>
-        </v-card-title>
-        <v-card-text>
-          <v-container>
-            <v-row>
-              <v-text-field v-model="userName" label="Name" required></v-text-field>
-            </v-row>
-          </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="saveName()">Continue</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </v-row>
-
   </v-container>
 </template>
 <script>
@@ -44,9 +21,7 @@ export default {
   data() {
     return {
       availableLanguages: [],
-      selectedLanguage: null,
-      userName: null,
-      dialog: false
+      selectedLanguage: null
     }
   },
 
@@ -58,23 +33,6 @@ export default {
   },
 
   methods: {
-    enterName(languageCode) {
-      this.selectedLanguage = languageCode;
-
-      if (sessionStorage.getItem('userName')) {
-        this.chooseLanguage();
-      }
-
-      this.dialog = true;
-    },
-
-    saveName() {
-      if (this.userName) {
-        sessionStorage.setItem('userName', this.userName);
-        this.chooseLanguage();
-      }
-    },
-
     chooseLanguage() {
       this.$router.push(`${this.selectedLanguage}/validate`);
     },

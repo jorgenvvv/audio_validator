@@ -2,6 +2,12 @@
 
 class Config(object):
     DEBUG = False
+ 
+    # Authentication
+    JWT_SECRET_KEY = ''
+    
+    GOOGLE_AUTH_CLIENT_ID = ''
+    GOOGLE_AUTH_CLIENT_SECRET = ''
     
     # Path where audio files are stored
     # AUDIO_PATH = ''

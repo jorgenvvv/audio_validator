@@ -10,21 +10,9 @@
       <span class="mr-3" v-if="$route.params.lang">
         Language: {{ $route.params.lang }}
       </span>
-      <v-menu left bottom>
-        <template v-slot:activator="{ on }">
-          <v-btn icon v-on="on">
-            <v-icon>mdi-settings</v-icon>
-          </v-btn>
-        </template>
-        <v-list>
-          <v-list-item to="/">
-            <v-list-item-title>Change language</v-list-item-title>
-          </v-list-item>
-          <v-list-item @click="dialog = true">
-            <v-list-item-title>Change name</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
+      <span class="mr-3" v-if="storeState.isAuthenticated">
+        <v-btn @click="logout()">Logout</v-btn>
+      </span>
     </v-app-bar>
     
     <v-content>
@@ -56,16 +44,21 @@
 </template>
 
 <script>
+import { store } from './store.js';
+
 export default {
   name: 'App',
   data() {
     return {
       dialog: false,
-      userName: null
+      userName: null,
+      storeState: store.state
     }
   },
 
   created() {
+    store.setAuthenticated(this.$auth.isAuthenticated());
+
     if (sessionStorage.getItem('userName')) {
       this.userName = sessionStorage.getItem('userName');
     }
@@ -77,6 +70,13 @@ export default {
         sessionStorage.setItem('userName', this.userName);
         this.dialog = false;
       }
+    },
+
+    logout() {
+      this.$auth.logout().then(() => {
+        store.setAuthenticated(false);
+        this.$router.push('/');
+      })
     }
   }
 };
