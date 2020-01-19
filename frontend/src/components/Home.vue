@@ -1,5 +1,13 @@
 <template>
   <v-container>
+     <v-overlay :value="loading">
+      <v-progress-circular
+        :size="50"
+        color="primary"
+        indeterminate
+      ></v-progress-circular>
+    </v-overlay>
+
     <v-card v-if="!storeState.isAuthenticated">
       <v-card-title>
         Please log in to continue...
@@ -28,7 +36,8 @@ import { store } from '../store.js';
 export default {
   data() {
     return {
-      storeState: store.state
+      storeState: store.state,
+      loading: false
     };
   },
 
@@ -44,14 +53,18 @@ export default {
         this.$auth.logout();
       }
 
+      this.loading = true;
+
       this.$auth
         .authenticate(provider)
         .then(() => {
           store.setAuthenticated(true);
+          this.loading = false;
           this.$router.push('languages');
         })
         .catch(error => {
           console.log('Authentication failed', error);
+          this.loading = false;
         });
     }
   }
