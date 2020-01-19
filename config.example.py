@@ -1,70 +1,48 @@
-# To use this file rename it to config.py
+
+"""
+===============================================
+To use this file as configuration rename it to:
+
+config.py
+
+===============================================
+"""
+
+import os
+
+basedir = os.path.abspath(os.path.dirname(__file__))
+
 
 class Config(object):
+    # Debug mode
     DEBUG = False
- 
-    # Authentication
+     
+    # Specify a secret key for JWT authentication
     JWT_SECRET_KEY = ''
-    
+
+    # JWT access token expire time (if not set default is 15 minutes)
+    JWT_ACCESS_TOKEN_EXPIRES = 7200  # 2 hours
+
+    # To use google authentication CLIENT_ID and CLIENT_SECRET are needed
+    # They can be obtained from https://console.developers.google.com/
     GOOGLE_AUTH_CLIENT_ID = ''
     GOOGLE_AUTH_CLIENT_SECRET = ''
+
+    # Sqlite database location
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'app.db')
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
     
     # Path where audio files are stored
-    # AUDIO_PATH = ''
+    AUDIO_PATH = ''
 
     # Path where audio validator can save its data
-    # DATA_PATH = ''
+    DATA_PATH = ''
 
     # Available languages that have data and can be validated
-    # AVAILABLE_LANGUAGES = [
-    #     {
-    #         'code': 'et',
-    #         'name': 'Estonian'
-    #     }
-    #     ...
-    # ]
-
-    # Languages that are displayed as checkboxes on the validation page
-    VALIDATION_LANGUAGES = [
+    AVAILABLE_LANGUAGES = [
         {
             'code': 'et',
             'name': 'Estonian'
-        },
-        {
-            'code': 'en',
-            'name': 'English'
-        },
-        {
-            'code': 'fi',
-            'name': 'Finnish'
-        },
-        {
-            'code': 'ur',
-            'name': 'Urdu'
-        },
-        {
-            'code': 'de',
-            'name': 'German'
-        },
-        {
-            'code': 'es',
-            'name': 'Spanish'
-        },
-        {
-            'code': 'lv',
-            'name': 'Latvian'
-        },
-        {
-            'code': 'ru',
-            'name': 'Russian'
-        },
-        {
-            'code': 'OTHER',
-            'name': 'Other'
-        },
-        {
-            'code': 'NO_LANGUAGE',
-            'name': 'No language'
         }
     ]
 
