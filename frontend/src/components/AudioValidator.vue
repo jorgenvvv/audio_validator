@@ -27,7 +27,6 @@
         :key="file.file_name"
       >
         <v-row
-          @keyup.68="selectCurrentLanguageOption(file)"
           @keyup.78="playNextAudio(file.file_name)"
         >
           <v-col cols="8">
@@ -212,20 +211,6 @@ export default {
           });
       } else {
         window.scrollTo(0, 0);
-      }
-    },
-
-    selectCurrentLanguageOption(file) {
-      if (!file.hasOwnProperty('languages')) {
-        this.$set(file, 'languages', []);
-      }
-
-      if (!file.languages.includes(this.$route.params.lang)) {
-        file.languages.push(this.$route.params.lang);
-      } else {
-        file.languages = file.languages.filter(
-          l => l !== this.$route.params.lang
-        );
       }
     },
 
