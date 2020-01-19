@@ -14,7 +14,7 @@
         <v-btn @click="logout()">Logout</v-btn>
       </span>
     </v-app-bar>
-    
+
     <v-content>
       <router-view></router-view>
     </v-content>
@@ -28,7 +28,11 @@
           <v-card-text>
             <v-container>
               <v-row>
-                <v-text-field v-model="userName" label="Name" required></v-text-field>
+                <v-text-field
+                  v-model="userName"
+                  label="Name"
+                  required
+                ></v-text-field>
               </v-row>
             </v-container>
           </v-card-text>
@@ -53,7 +57,7 @@ export default {
       dialog: false,
       userName: null,
       storeState: store.state
-    }
+    };
   },
 
   created() {
@@ -76,7 +80,7 @@ export default {
       this.$auth.logout().then(() => {
         store.setAuthenticated(false);
         this.$router.push('/');
-      })
+      });
     }
   }
 };
