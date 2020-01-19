@@ -23,7 +23,7 @@
 
       <div :class="file.language ? validatedClasses : ''" v-for="file of audioFiles" :key="file.file_name">
         <v-row @keyup.68="selectCurrentLanguageOption(file)" @keyup.78="playNextAudio(file.file_name)">
-          <v-col cols="4">
+          <v-col cols="8">
             <v-row class="pl-6 py-1" v-if="file.metadata">
               <v-col class="pa-0">
                 <div>{{ file.metadata.title }}</div>
@@ -51,11 +51,14 @@
               </v-row>
             </v-row>
           </v-col>
-          <v-col cols="8">
-            <v-row>
-              <v-radio-group v-model="file.language" row>
-                <v-radio label="Is Given Language" value="GIVEN_LANG"></v-radio>
-                <v-radio label="Not Given Language" value="NOT_GIVEN_LANG"></v-radio>
+          <v-col cols="4">
+            <v-row class="ml-2"> 
+              <v-radio-group v-model="file.language" column>
+                <template v-slot:label>
+                  <div class="overline">Select spoken language</div>
+                </template>
+                <v-radio :label="currentLanguage.name" value="GIVEN_LANG"></v-radio>
+                <v-radio :label="'Not ' + currentLanguage.name" value="NOT_GIVEN_LANG"></v-radio>
                 <v-radio label="No Speech" value="NO_SPEECH"></v-radio>
               </v-radio-group>
             </v-row>
@@ -83,9 +86,9 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      validationLanguageOptions: [],
       audioFiles: [],
       invalidFields: false,
+      currentLanguage: {},
       snackbar: false,
       loading: false
     };
@@ -94,8 +97,8 @@ export default {
   created() {
     this.loading = true;
     axios.all([
-      this.loadValidationLanguageOptions(),
-      this.loadAudio()
+      this.loadAudio(),
+      this.loadCurrentLanguage()
     ]).then(() => {
       this.loading = false;
     })
@@ -119,14 +122,6 @@ export default {
   },
 
   methods: {
-    loadValidationLanguageOptions() {
-      return axios
-        .get(process.env.VUE_APP_API_URL + '/languages/validationoptions')
-        .then(response => {
-          this.validationLanguageOptions = response.data;
-        });
-    },
-
     loadAudio() {
       return  axios
         .get(
@@ -139,6 +134,19 @@ export default {
           this.audioFiles = response.data.filter(
             f => !f.file_name.endsWith('info.json')
           );
+        });
+    },
+
+    loadCurrentLanguage() {
+      return  axios
+        .get(
+          process.env.VUE_APP_API_URL +
+            '/languages/' +
+            this.$route.params.lang +
+            '/info'
+        )
+        .then(response => {
+          this.currentLanguage = response.data;
         });
     },
 

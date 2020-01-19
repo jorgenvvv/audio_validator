@@ -15,14 +15,6 @@
       </v-card-text>
     </v-card>
 
-    <v-row>
-      <div v-if="storeState.isAuthenticated">
-        You are successfully authenticated
-        <div>{{$auth.getToken()}}</div>
-      </div>
-      <hr>
-    </v-row>
-
   </v-container>
 </template>
 <script>

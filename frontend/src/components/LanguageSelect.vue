@@ -1,8 +1,8 @@
 <template>
   <v-container>
     <v-list>
-      <v-list-item v-for="lang in availableLanguages" :key="lang.code">
-        <v-list-item-content @click="chooseLanguage(lang.code)">
+      <v-list-item v-for="lang in availableLanguages" :key="lang.code" @click="chooseLanguage(lang.code)">
+        <v-list-item-content>
           <v-list-item-title>{{ lang.name }} ({{ lang.validated }} / {{ lang.total }})</v-list-item-title>
           <v-list-item-subtitle>
             <v-progress-linear :value="validatedPercentage(lang.total, lang.validated)" height="25">

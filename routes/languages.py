@@ -12,12 +12,6 @@ from ..model.validated_audio import ValidatedAudio, db
 
 languages = Blueprint('languages', __name__)
 
-
-@languages.route('/languages/validationoptions')
-def get_validation_options():
-    return jsonify(app.config['VALIDATION_LANGUAGES'])
-
-
 @languages.route('/languages/all')
 @jwt_required
 def get_all_languages():
@@ -35,3 +29,12 @@ def get_all_languages():
         language['validated'] = validated_files_count
 
     return jsonify(available_languages)
+
+
+@languages.route('/languages/<lang>/info')
+@jwt_required
+def get_language_info(lang):
+    correct_lang_config = next(
+        (l for l in app.config['AVAILABLE_LANGUAGES'] if l['code'] == lang), None)
+
+    return jsonify(correct_lang_config)
