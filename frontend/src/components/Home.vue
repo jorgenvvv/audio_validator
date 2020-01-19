@@ -21,7 +21,7 @@
         >
           <v-avatar size="30" class="mr-2">
             <img
-              src="https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-suite-everything-you-need-know-about-google-newest-0.png"
+              :src="publicPath + 'assets/google_logo.png'"
             />
           </v-avatar>
           Login With Google
@@ -36,6 +36,7 @@ import { store } from '../store.js';
 export default {
   data() {
     return {
+      publicPath: process.env.BASE_URL,
       storeState: store.state,
       loading: false
     };
