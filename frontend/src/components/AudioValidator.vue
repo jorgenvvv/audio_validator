@@ -21,7 +21,7 @@
         A spoken language has to be chosen for all audio clips.
       </v-alert>
 
-      <div :class="file.languages && file.languages.length > 0 ? validatedClasses : ''" v-for="file of audioFiles" :key="file.file_name">
+      <div :class="file.language ? validatedClasses : ''" v-for="file of audioFiles" :key="file.file_name">
         <v-row @keyup.68="selectCurrentLanguageOption(file)" @keyup.78="playNextAudio(file.file_name)">
           <v-col cols="4">
             <v-row class="pl-6 py-1" v-if="file.metadata">
@@ -53,15 +53,11 @@
           </v-col>
           <v-col cols="8">
             <v-row>
-              <v-checkbox
-                v-for="language in validationLanguageOptions"
-                :key="language.code"
-                class="ma-0 mx-2"
-                v-model="file.languages"
-                :value="language.code"
-                multiple
-                :label="language.name"
-              ></v-checkbox>
+              <v-radio-group v-model="file.language" row>
+                <v-radio label="Is Given Language" value="GIVEN_LANG"></v-radio>
+                <v-radio label="Not Given Language" value="NOT_GIVEN_LANG"></v-radio>
+                <v-radio label="No Speech" value="NO_SPEECH"></v-radio>
+              </v-radio-group>
             </v-row>
           </v-col>
         </v-row>
@@ -96,10 +92,6 @@ export default {
   },
 
   created() {
-    if (!sessionStorage.getItem('userName')) {
-      this.$router.push('/');
-    }
-
     this.loading = true;
     axios.all([
       this.loadValidationLanguageOptions(),
@@ -161,7 +153,7 @@ export default {
 
       let allValid = true;
       this.audioFiles = this.audioFiles.map(a => {
-        if (!a.hasOwnProperty('languages') || a.languages.length === 0) {
+        if (!a.hasOwnProperty('language') || !a.language) {
           allValid = false;
         }
 
@@ -175,16 +167,8 @@ export default {
 
     saveValidatedAudio() {
       if (this.validateAnswers()) {
-        if (sessionStorage.getItem('userName'))
-          this.audioFiles.forEach(f => {
-            this.$set(f, 'validated_by', sessionStorage.getItem('userName'));
-          });
-        else
-          this.audioFiles.forEach(f => this.$set(f, 'validated_by', 'UNKNOWN'));
-
-        let currentDateTime = new Date();
         this.audioFiles.forEach(f => {
-          this.$set(f, 'validated_at', currentDateTime.toISOString());
+          this.$set(f, 'expected_language_code', this.$route.params.lang);
           this.$set(f, 'video_id', f.metadata.id);
           this.$set(f, 'video_title', f.metadata.title);
           delete f['metadata'];

@@ -1,81 +1,77 @@
 import json
 import os
 import random
+from datetime import datetime as dt
 from json.decoder import JSONDecodeError
 
 from flask import Blueprint, Flask
 from flask import current_app as app
-from flask import jsonify, send_file, send_from_directory, request
-from flask_cors import CORS
+from flask import jsonify, request, send_file, send_from_directory
+from flask_jwt_extended import get_jwt_claims, jwt_required
+
+from ..model.validated_audio import ValidatedAudio, db
 
 audio = Blueprint('audio', __name__)
 
+
 @audio.route('/audio/<lang>/all')
 def get_audio(lang):
-    all_audio_files = os.listdir(app.config['AUDIO_PATH'] + lang)
-    audio_files = list(filter(lambda f: not f.endswith('info.json'), all_audio_files))
-
-    json_file_name = app.config['DATA_PATH'] + lang + '.json'
-
-    if os.path.isfile(json_file_name):
-        with open(json_file_name) as json_file:
-            try:
-                json_data = json.load(json_file)
-            except JSONDecodeError:
-                json_data = {}
-                json_data['validatedAudio'] = []
-    else:
-        json_data = {}
-        json_data['validatedAudio'] = []
-
-    validated_file_names = json_data['validatedAudio']
-
-    not_validated_audio_files = []
+    all_data_files = os.listdir(app.config['AUDIO_PATH'] + lang)
+    audio_files = list(
+        filter(lambda f: not f.endswith('info.json'), all_data_files))
 
     random.shuffle(audio_files)
 
+    selected_audio_files = []
+
     for audio_file in audio_files:
-        if len(not_validated_audio_files) >= app.config['ITEMS_ON_PAGE']:
+        if len(selected_audio_files) >= app.config['ITEMS_ON_PAGE']:
             break
 
-        if not any(v['file_name'] == audio_file for v in validated_file_names):
-            audio_file_name = os.path.splitext(audio_file)[0]
-            metadata_file_name = audio_file_name.split('__')[0] + '.info.json'
-            with open(os.path.join(app.config['AUDIO_PATH'] + lang, metadata_file_name)) as json_file:
-                json_metadata = json.load(json_file)
-                
-            not_validated_audio_files.append({'file_name': audio_file, 'metadata': json_metadata})
+        exists = db.session.query(ValidatedAudio.id).filter_by(
+            file_name=audio_file).scalar() is not None
 
-    return jsonify(not_validated_audio_files)
-
-@audio.route('/audio/validated', methods=['GET', 'POST'])
-def save_validated_audio():
-    data = request.get_json()
-
-    json_file_name = app.config['DATA_PATH'] + data['lang'] + '.json'
-
-    if not os.path.isfile(json_file_name):
-        json_data = {}
-        json_data['validatedAudio'] = []
-    else:
-        with open(json_file_name) as json_file:
-            try:
-                json_data = json.load(json_file)
-            except JSONDecodeError:
-                json_data = {}
-                json_data['validatedAudio'] = []
-
-
-    for d in data['data']:
-        if any(a['file_name'] == d['file_name'] for a in json_data['validatedAudio']):
+        if exists:
             continue
 
-        json_data['validatedAudio'].append(d)
+        metadata_file_name = audio_file.split('__')[0] + '.info.json'
+        with open(os.path.join(app.config['AUDIO_PATH'] + lang, metadata_file_name)) as json_file:
+            json_metadata = json.load(json_file)
 
-    with open(json_file_name, "w") as json_file:
-        json.dump(json_data, json_file)
+        metadata_required = ['id', 'description', 'title']
+        filtered_metadata = {
+            r: json_metadata[r] for r in metadata_required}
 
-    return jsonify(data)
+        selected_audio_files.append(
+            {'file_name': audio_file, 'metadata': filtered_metadata})
+
+    return jsonify(selected_audio_files)
+
+
+@audio.route('/audio/validated', methods=['POST'])
+@jwt_required
+def save_validated_audio():
+    req = request.get_json()
+
+    claims = get_jwt_claims()
+
+    for audio in req['data']:
+        validated_audio = ValidatedAudio(
+            file_name=audio['file_name'],
+            created_at=dt.now(),
+            created_by=claims['email'],
+            expected_language_code=audio['expected_language_code'],
+            validation_value=audio['language'],
+            video_id=audio['video_id'],
+            video_title=audio['video_title']
+        )
+
+        db.session.add(validated_audio)
+
+    db.session.commit()
+
+    return '', 200
+
 
 @audio.route('/audio/<lang>/<name>')
 def get_audio_with_name(lang, name):

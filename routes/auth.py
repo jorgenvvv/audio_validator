@@ -7,8 +7,15 @@ from flask import jsonify, request
 from flask_jwt_extended import (create_access_token, get_jwt_identity,
                                 jwt_required)
 
+from .. import jwt
+
 auth = Blueprint('auth', __name__)
 
+@jwt.user_claims_loader
+def add_claims_to_access_token(identity):
+    return {
+        'email': identity
+    }
 
 @auth.route('/auth/<provider>', methods=['POST'])
 def authenticate(provider):

@@ -51,7 +51,7 @@ const routes = [
   { path: '/auth/callback', name: 'auth' },
   { path: '/languages', name: 'languages', component: LanguageSelect },
   {
-    path: '/:lang/validate',
+    path: '/languages/:lang/validate',
     name: 'audiovalidator',
     component: AudioValidator,
     meta: {

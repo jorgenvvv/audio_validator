@@ -8,6 +8,8 @@ from flask import jsonify, send_file, send_from_directory
 from flask_cors import CORS
 from flask_jwt_extended import jwt_required
 
+from ..model.validated_audio import ValidatedAudio, db
+
 languages = Blueprint('languages', __name__)
 
 
@@ -26,22 +28,8 @@ def get_all_languages():
         total_files_count = len(
             list(filter(lambda f: not f.endswith('info.json'), all_files)))
 
-        json_file_name = app.config['DATA_PATH'] + language['code'] + '.json'
-
-        if os.path.isfile(json_file_name):
-            with open(json_file_name) as json_file:
-                try:
-                    json_data = json.load(json_file)
-                except JSONDecodeError:
-                    json_data = {}
-                    json_data['validatedAudio'] = []
-        else:
-            json_data = {}
-            json_data['validatedAudio'] = []
-
-        validated_file_names = json_data['validatedAudio']
-
-        validated_files_count = len(validated_file_names)
+        validated_files_count = db.session.query(
+            ValidatedAudio.id).filter_by(expected_language_code=language['code']).count()
 
         language['total'] = total_files_count
         language['validated'] = validated_files_count
