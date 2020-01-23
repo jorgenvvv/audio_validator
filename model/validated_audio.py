@@ -30,5 +30,7 @@ class ValidatedAudio(db.Model):
         db.String(500)
     )
 
+
+
     def __repr__(self):
-        return '<ValidatedAudio {}>'.format(self.segment_id)
+        return '<ValidatedAudio {}>'.format(self.file_name)
