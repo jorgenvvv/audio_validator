@@ -1,28 +1,38 @@
 <template>
   <v-container>
     <v-list>
-      <v-list-item
-        v-for="lang in availableLanguages"
-        :key="lang.code"
-        @click="chooseLanguage(lang.code)"
-      >
-        <v-list-item-content>
-          <v-list-item-title
-            >{{ lang.name }} ({{ lang.validated }} /
-            {{ lang.total }})</v-list-item-title
-          >
-          <v-list-item-subtitle>
-            <v-progress-linear
-              :value="validatedPercentage(lang.total, lang.validated)"
-              height="25"
-            >
-              <strong
-                >{{ validatedPercentage(lang.total, lang.validated) }}%</strong
-              >
-            </v-progress-linear>
-          </v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
+      <v-row>
+        <v-col
+          v-for="lang in availableLanguages"
+          :key="lang.code"
+          cols="12"
+          sm="6"
+        >
+          <v-list-item @click="chooseLanguage(lang.code)">
+            <v-list-item-content>
+              <v-list-item-title class="d-inline-flex justify-space-between">
+                <span>{{ lang.name }} ({{ lang.nativeName }})</span>
+
+                <span class="caption"
+                  >({{ lang.validated }} / {{ lang.total }})</span
+                >
+              </v-list-item-title>
+              <v-list-item-subtitle>
+                <v-progress-linear
+                  :value="validatedPercentage(lang.total, lang.validated)"
+                  height="25"
+                >
+                  <strong
+                    >{{
+                      validatedPercentage(lang.total, lang.validated)
+                    }}%</strong
+                  >
+                </v-progress-linear>
+              </v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+        </v-col>
+      </v-row>
     </v-list>
   </v-container>
 </template>
