@@ -7,47 +7,29 @@
         </router-link>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <span class="mr-3" v-if="$route.params.lang">
-        Language: {{ $route.params.lang }}
+      <span class="mr-3 text-uppercase" v-if="$route.params.lang">
+        <v-icon>mdi-web</v-icon>
+        {{ $route.params.lang }}
       </span>
       <span class="mr-3" v-if="storeState.isAuthenticated">
-        <v-btn @click="logout()">Logout</v-btn>
+        <v-icon>mdi-account-circle-outline</v-icon>
+        {{ storeState.userInfo.name }}
+      </span>
+      <span class="mr-3" v-if="storeState.isAuthenticated">
+        <v-btn depressed small @click="logout()">
+          Logout
+        </v-btn>
       </span>
     </v-app-bar>
 
     <v-content>
       <router-view></router-view>
     </v-content>
-
-    <v-row v-if="dialog" justify="center">
-      <v-dialog v-model="dialog" max-width="600px">
-        <v-card>
-          <v-card-title>
-            <span class="headline">Change your name</span>
-          </v-card-title>
-          <v-card-text>
-            <v-container>
-              <v-row>
-                <v-text-field
-                  v-model="userName"
-                  label="Name"
-                  required
-                ></v-text-field>
-              </v-row>
-            </v-container>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn text @click="dialog = false">Cancel</v-btn>
-            <v-btn color="blue darken-1" text @click="saveName()">Save</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </v-row>
   </v-app>
 </template>
 
 <script>
+import axios from 'axios';
 import { store } from './store.js';
 
 export default {
@@ -55,7 +37,6 @@ export default {
   data() {
     return {
       dialog: false,
-      userName: null,
       storeState: store.state
     };
   },
@@ -63,22 +44,18 @@ export default {
   created() {
     store.setAuthenticated(this.$auth.isAuthenticated());
 
-    if (sessionStorage.getItem('userName')) {
-      this.userName = sessionStorage.getItem('userName');
+    if (this.storeState.isAuthenticated) {
+      axios.get(process.env.VUE_APP_API_URL + '/user').then((response) => {
+        store.setUserInfo(response.data);
+      });
     }
   },
 
   methods: {
-    saveName() {
-      if (this.userName) {
-        sessionStorage.setItem('userName', this.userName);
-        this.dialog = false;
-      }
-    },
-
     logout() {
       this.$auth.logout().then(() => {
         store.setAuthenticated(false);
+        store.setUserInfo({});
         this.$router.push('/');
       });
     }

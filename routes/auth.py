@@ -13,9 +13,20 @@ auth = Blueprint('auth', __name__)
 
 @jwt.user_claims_loader
 def add_claims_to_access_token(identity):
-    return {
-        'email': identity
+    claims = {
+        'userinfo': identity
     }
+
+    if 'email' in identity:
+        claims['user'] = identity['email']
+        return claims
+    elif 'name' in identity:
+        claims['user'] = identity['name']
+        return claims
+    else:
+        claims['user'] = 'UNKNOWN'
+
+    return claims
 
 @auth.route('/auth/<provider>', methods=['POST'])
 def authenticate(provider):
@@ -37,7 +48,7 @@ def authenticate(provider):
             "https://openidconnect.googleapis.com/v1/userinfo", headers=headers)
 
         access_token = create_access_token(
-            identity=user_info_request.json()['email'])
+            identity=user_info_request.json())
 
         return jsonify(access_token=access_token), 200
 

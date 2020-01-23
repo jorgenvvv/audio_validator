@@ -39,7 +39,7 @@ def get_audio(lang):
         .having(
             and_(
                 func.count(ValidatedAudio.file_name) == 1,
-                ValidatedAudio.created_by != claims['email']
+                ValidatedAudio.created_by != claims['user']
             )
         )
         .limit(validated_limit)
@@ -75,7 +75,7 @@ def save_validated_audio():
         validated_audio = ValidatedAudio(
             file_name=audio['file_name'],
             created_at=dt.now(),
-            created_by=claims['email'],
+            created_by=claims['user'],
             expected_language_code=audio['expected_language_code'],
             validation_value=audio['language'],
             video_id=audio['video_id'],

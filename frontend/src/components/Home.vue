@@ -31,6 +31,7 @@
   </v-container>
 </template>
 <script>
+import axios from 'axios';
 import { store } from '../store.js';
 
 export default {
@@ -60,8 +61,11 @@ export default {
         .authenticate(provider)
         .then(() => {
           store.setAuthenticated(true);
-          this.loading = false;
-          this.$router.push('languages');
+          axios.get(process.env.VUE_APP_API_URL + '/user').then((response) => {
+            store.setUserInfo(response.data);
+            this.loading = false;
+            this.$router.push('languages');
+          });
         })
         .catch(error => {
           console.log('Authentication failed', error);
