@@ -47,4 +47,8 @@ def create_app():
     def index():
         return render_template('index.html')
 
+    @app.route('/assets/<path:path>')
+    def get_assets(path):
+        return send_from_directory('./dist/assets', path)
+
     return app
