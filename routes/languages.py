@@ -19,13 +19,19 @@ def get_all_languages():
 
     for language in available_languages:
         all_files = os.listdir(app.config['AUDIO_PATH'] + language['code'])
-        total_files_count = len(
-            list(filter(lambda f: not f.endswith('info.json'), all_files)))
 
-        validated_files_count = db.session.query(
-            ValidatedAudio.id).filter_by(expected_language_code=language['code']).count()
+        all_audio_files_count = len([f for f in all_files if not f.endswith('info.json')])
 
-        language['total'] = total_files_count
+        validated_files_count = (
+            db.session.query(
+                ValidatedAudio.file_name
+            )
+            .filter_by(expected_language_code=language['code'])
+            .distinct()
+            .count()
+        )
+
+        language['total'] = all_audio_files_count
         language['validated'] = validated_files_count
 
     return jsonify(available_languages)
