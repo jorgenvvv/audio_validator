@@ -64,7 +64,12 @@ export default {
           axios.get(process.env.VUE_APP_API_URL + '/user').then((response) => {
             store.setUserInfo(response.data);
             this.loading = false;
-            this.$router.push('languages');
+
+            if (this.$route.query.source) {
+              this.$router.push(this.$route.query.source)
+            } else {
+              this.$router.push('languages');
+            }
           });
         })
         .catch(error => {

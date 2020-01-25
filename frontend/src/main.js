@@ -79,7 +79,7 @@ router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (!router.app.$auth.isAuthenticated()) {
       store.setAuthenticated(false);
-      next('/');
+      next({path: '/', query: { source: to.path }});
     } else {
       next();
     }
