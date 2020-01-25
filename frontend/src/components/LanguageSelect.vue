@@ -2,6 +2,20 @@
   <v-container>
     <v-item-group>
       <v-container>
+        <v-row no-gutters class="justify-end mb-3">
+          <v-col cols="12" sm="4" md="3">
+            <v-select
+              @change="sortLanguages()"
+              v-model="sortOrder"
+              :items="sortOptions"
+              label="Sort By"
+              solo
+              dense
+              hide-details
+            ></v-select>
+          </v-col>
+        </v-row>
+        <v-divider></v-divider>
         <v-row>
           <v-col
             v-for="lang in availableLanguages"
@@ -46,7 +60,18 @@ export default {
   data() {
     return {
       availableLanguages: [],
-      selectedLanguage: null
+      selectedLanguage: null,
+      sortOptions: [
+        {
+          text: 'Language - Ascending',
+          value: 'LANGUAGE_ASC'
+        },
+        {
+          text: 'Language - Descending',
+          value: 'LANGUAGE_DESC'
+        }
+      ],
+      sortOrder: null
     };
   },
 
@@ -63,6 +88,14 @@ export default {
 
     validatedPercentage(total, validated) {
       return ((validated / total) * 100).toFixed(1);
+    },
+
+    sortLanguages() {
+      if (this.sortOrder === 'LANGUAGE_ASC')
+        this.availableLanguages.sort((a, b) => a.name.localeCompare(b.name));
+
+      if (this.sortOrder === 'LANGUAGE_DESC')
+        this.availableLanguages.sort((a, b) => b.name.localeCompare(a.name));
     }
   }
 };
