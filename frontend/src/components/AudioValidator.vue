@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-card class="pa-2 mb-2">
+    <v-card class="pa-2 mb-2" v-if="currentLanguage.name">
       <b>Selected Language</b>: {{ currentLanguage.name }} ({{ currentLanguage.nativeName }})
       <v-btn text small color="primary" @click="$router.push('/languages')">Change</v-btn>
     </v-card>
