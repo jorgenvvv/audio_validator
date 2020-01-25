@@ -1,39 +1,42 @@
 <template>
   <v-container>
-    <v-list>
-      <v-row>
-        <v-col
-          v-for="lang in availableLanguages"
-          :key="lang.code"
-          cols="12"
-          sm="6"
-        >
-          <v-list-item @click="chooseLanguage(lang.code)">
-            <v-list-item-content>
-              <v-list-item-title class="d-inline-flex justify-space-between">
-                <span>{{ lang.name }} ({{ lang.nativeName }})</span>
+    <v-item-group>
+      <v-container>
+        <v-row>
+          <v-col
+            v-for="lang in availableLanguages"
+            :key="lang.code"
+            cols="12"
+            sm="6"
+            md="4"
+          >
+            <v-item>
+              <v-card @click="chooseLanguage(lang.code)">
+                <v-card-title class="subtitle-1 justify-space-between">
+                  <span>{{ lang.name }} ({{ lang.nativeName }})</span>
 
-                <span class="caption"
-                  >({{ lang.validated }} / {{ lang.total }})</span
-                >
-              </v-list-item-title>
-              <v-list-item-subtitle>
-                <v-progress-linear
-                  :value="validatedPercentage(lang.total, lang.validated)"
-                  height="25"
-                >
-                  <strong
-                    >{{
-                      validatedPercentage(lang.total, lang.validated)
-                    }}%</strong
+                  <span class="caption"
+                    >({{ lang.validated }} / {{ lang.total }})</span
                   >
-                </v-progress-linear>
-              </v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-        </v-col>
-      </v-row>
-    </v-list>
+                </v-card-title>
+                <v-card-text>
+                  <v-progress-linear
+                    :value="validatedPercentage(lang.total, lang.validated)"
+                    height="25"
+                  >
+                    <strong
+                      >{{
+                        validatedPercentage(lang.total, lang.validated)
+                      }}%</strong
+                    >
+                  </v-progress-linear>
+                </v-card-text>
+              </v-card>
+            </v-item>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-item-group>
   </v-container>
 </template>
 <script>

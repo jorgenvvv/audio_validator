@@ -1,5 +1,9 @@
 <template>
   <v-container>
+    <v-card class="pa-2 mb-2">
+      <b>Selected Language</b>: {{ currentLanguage.name }} ({{ currentLanguage.nativeName }})
+      <v-btn text small color="primary" @click="$router.push('/languages')">Change</v-btn>
+    </v-card>
     <v-alert
       v-if="audioFiles.length === 0 && !loading"
       border="top"
@@ -7,7 +11,7 @@
       type="info"
       elevation="2"
     >
-      There is no more audio to validate for current language.
+      There is no more audio to validate for selected language.
     </v-alert>
     <v-overlay :value="loading">
       <v-progress-circular
