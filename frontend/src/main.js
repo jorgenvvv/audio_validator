@@ -70,7 +70,7 @@ const routes = [
 
 const router = new VueRouter({
   mode: 'history',
-  base: 'lid_validate',
+  base: process.env.BASE_URL,
   routes
 });
 
