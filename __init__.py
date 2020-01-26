@@ -9,13 +9,13 @@ from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from flask_sqlalchemy import SQLAlchemy
 
-from audio_validator.config import Config
 
 db = SQLAlchemy()
 jwt = JWTManager()
 
 def create_app():
     from . import routes
+    from .config import Config
 
     app = Flask(
         __name__,
@@ -24,7 +24,8 @@ def create_app():
         template_folder='./dist'
     )
 
-    app.config.from_object(config.Config)
+    app.config.from_object(Config)
+    app.config.from_json(app.config['LANGUAGES_FILE_PATH'])
 
     db.init_app(app)
     jwt.init_app(app)

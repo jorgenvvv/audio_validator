@@ -1,9 +1,11 @@
 
 """
 ===============================================
+APP CONFIGURATION
+
 To use this file as configuration rename it to:
 
-config.py
+    config.py
 
 ===============================================
 """
@@ -35,16 +37,9 @@ class Config(object):
     # Path where audio files are stored
     AUDIO_PATH = ''
 
-    # Path where audio validator can save its data
-    DATA_PATH = ''
-
-    # Available languages that have data and can be validated
-    AVAILABLE_LANGUAGES = [
-        {
-            'code': 'et',
-            'name': 'Estonian'
-        }
-    ]
+    # Path to a json file where language codes and names are stored
+    # This file will be imported into app config separately
+    LANGUAGES_FILE_PATH = os.path.join(basedir, 'languages.json')
 
     # How many audio files to display on page
     ITEMS_ON_PAGE = 10
