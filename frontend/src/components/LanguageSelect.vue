@@ -18,14 +18,14 @@
         <v-divider></v-divider>
         <v-row>
           <v-col
-            v-for="lang in availableLanguages"
-            :key="lang.code"
+            v-for="(lang, key) in availableLanguages"
+            :key="key"
             cols="12"
             sm="6"
             md="4"
           >
             <v-item>
-              <v-card @click="chooseLanguage(lang.code)">
+              <v-card @click="chooseLanguage(key)">
                 <v-card-title class="subtitle-1 justify-space-between">
                   <span>{{ lang.name }} ({{ lang.nativeName }})</span>
 
@@ -59,7 +59,7 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      availableLanguages: [],
+      availableLanguages: {},
       selectedLanguage: null,
       sortOptions: [
         {

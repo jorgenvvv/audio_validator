@@ -12,27 +12,33 @@ from ..model.validated_audio import ValidatedAudio, db
 
 languages = Blueprint('languages', __name__)
 
+
 @languages.route('/languages/all')
 @jwt_required
 def get_all_languages():
-    available_languages = app.config['AVAILABLE_LANGUAGES']
+    languages_in_folder = os.listdir(app.config['AUDIO_PATH'])
+    all_languages = app.config['ALL_LANGUAGES']
+
+    available_languages = {
+        lang: all_languages[lang] for lang in languages_in_folder}
 
     for language in available_languages:
-        all_files = os.listdir(app.config['AUDIO_PATH'] + language['code'])
+        all_files = os.listdir(app.config['AUDIO_PATH'] + language)
 
-        all_audio_files_count = len([f for f in all_files if not f.endswith('info.json')])
+        all_audio_files_count = len(
+            [f for f in all_files if not f.endswith('info.json')])
 
         validated_files_count = (
             db.session.query(
                 ValidatedAudio.file_name
             )
-            .filter_by(expected_language_code=language['code'])
+            .filter_by(expected_language_code=language)
             .distinct()
             .count()
         )
 
-        language['total'] = all_audio_files_count
-        language['validated'] = validated_files_count
+        all_languages[language]['total'] = all_audio_files_count
+        all_languages[language]['validated'] = validated_files_count
 
     return jsonify(available_languages)
 
@@ -40,7 +46,6 @@ def get_all_languages():
 @languages.route('/languages/<lang>/info')
 @jwt_required
 def get_language_info(lang):
-    correct_lang_config = next(
-        (l for l in app.config['AVAILABLE_LANGUAGES'] if l['code'] == lang), None)
+    language_info = app.config['AVAILABLE_LANGUAGES'][lang]
 
-    return jsonify(correct_lang_config)
+    return jsonify(language_info)

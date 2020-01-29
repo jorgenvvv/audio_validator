@@ -8,6 +8,5 @@ dist
 .vscode
 
 config.py
-languages.json
 
 app.db
