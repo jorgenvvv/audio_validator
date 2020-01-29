@@ -46,6 +46,6 @@ def get_all_languages():
 @languages.route('/languages/<lang>/info')
 @jwt_required
 def get_language_info(lang):
-    language_info = app.config['AVAILABLE_LANGUAGES'][lang]
+    language_info = app.config['ALL_LANGUAGES'][lang]
 
     return jsonify(language_info)

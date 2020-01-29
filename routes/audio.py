@@ -96,7 +96,7 @@ def get_audio_with_name(lang, name):
 
 def get_audio_metadata(audio_file, lang):
     metadata_file_name = audio_file.split('__')[0] + '.info.json'
-    with open(os.path.join(app.config['AUDIO_PATH'] + lang, metadata_file_name)) as json_file:
+    with open(os.path.join(app.config['AUDIO_METADATA_PATH'] + lang, metadata_file_name)) as json_file:
         json_metadata = json.load(json_file)
 
     metadata_required = ['id', 'description', 'title']
