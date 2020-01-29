@@ -17,6 +17,13 @@
         </v-row>
         <v-divider></v-divider>
         <v-row>
+          <v-col class="mt-5 d-flex justify-center" v-if="languagesLoading">
+            <v-progress-circular
+              :size="50"
+              color="primary"
+              indeterminate
+            ></v-progress-circular>
+          </v-col>
           <v-col
             v-for="(lang, key) in availableLanguages"
             :key="key"
@@ -71,13 +78,16 @@ export default {
           value: 'LANGUAGE_DESC'
         }
       ],
-      sortOrder: null
+      sortOrder: null,
+      languagesLoading: false
     };
   },
 
   created() {
+    this.languagesLoading = true;
     axios.get(process.env.VUE_APP_API_URL + '/languages/all').then(response => {
       this.availableLanguages = response.data;
+      this.languagesLoading = false;
     });
   },
 
