@@ -45,7 +45,9 @@ def get_audio(lang):
 
 
     for validated_file, in once_validated_files:
-        selected_audio_files.append(get_audio_metadata(validated_file, lang))
+        metadata = get_audio_metadata(validated_file, lang)
+        if metadata is not None:
+            selected_audio_files.append(metadata)
 
     for audio_file in audio_files:
         if len(selected_audio_files) >= app.config['ITEMS_ON_PAGE']:
@@ -57,7 +59,9 @@ def get_audio(lang):
         if exists:
             continue
 
-        selected_audio_files.append(get_audio_metadata(audio_file, lang))
+        metadata = get_audio_metadata(audio_file, lang)
+        if metadata is not None:
+            selected_audio_files.append(metadata)
 
     return jsonify(selected_audio_files)
 
@@ -94,8 +98,12 @@ def get_audio_with_name(lang, name):
 
 def get_audio_metadata(audio_file, lang):
     metadata_file_name = audio_file.split('__')[0] + '.info.json'
-    with open(os.path.join(app.config['AUDIO_METADATA_PATH'] + lang, metadata_file_name)) as json_file:
-        json_metadata = json.load(json_file)
+
+    try:
+        with open(os.path.join(app.config['AUDIO_METADATA_PATH'] + lang, metadata_file_name)) as json_file:
+            json_metadata = json.load(json_file)
+    except OSError:
+        return None
 
     metadata_required = ['id', 'description', 'title']
     filtered_metadata = {
