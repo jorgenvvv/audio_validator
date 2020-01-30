@@ -148,9 +148,7 @@ export default {
             '/all'
         )
         .then(response => {
-          this.audioFiles = response.data.filter(
-            f => !f.file_name.endsWith('info.json')
-          );
+          this.audioFiles = response.data;
         });
     },
 

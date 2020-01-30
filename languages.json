@@ -93,6 +93,10 @@
       "name": "Chechen",
       "nativeName": "Нохчийн"
     },
+    "ceb": {
+      "name": "Cebuano",
+      "nativeName": "Bisaya / Sinugbuanon"
+    },
     "ch": {
       "name": "Chamorro",
       "nativeName": "Chamoru"
@@ -564,6 +568,10 @@
       "name": "Sardinian",
       "nativeName": "Sardu"
     },
+    "sco": {
+      "name": "Scots",
+      "nativeName": "Scots"
+    },
     "sd": {
       "name": "Sindhi",
       "nativeName": "सिनधि"
@@ -720,6 +728,10 @@
     "wa": {
       "name": "Walloon",
       "nativeName": "Walon"
+    },
+    "war": {
+      "name": "Waray",
+      "nativeName": "Waray"
     },
     "wo": {
       "name": "Wolof",

@@ -20,9 +20,7 @@ audio = Blueprint('audio', __name__)
 def get_audio(lang):
     claims = get_jwt_claims()
 
-    all_data_files = os.listdir(app.config['AUDIO_PATH'] + lang)
-
-    audio_files = [f for f in all_data_files if not f.endswith('info.json')]
+    audio_files = os.listdir(app.config['AUDIO_PATH'] + lang)
 
     random.shuffle(audio_files)
 

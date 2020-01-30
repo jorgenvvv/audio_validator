@@ -25,8 +25,7 @@ def get_all_languages():
     for language in available_languages:
         all_files = os.listdir(app.config['AUDIO_PATH'] + language)
 
-        all_audio_files_count = len(
-            [f for f in all_files if not f.endswith('info.json')])
+        all_audio_files_count = len(all_files)
 
         validated_files_count = (
             db.session.query(
