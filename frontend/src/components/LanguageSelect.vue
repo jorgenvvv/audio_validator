@@ -25,14 +25,14 @@
             ></v-progress-circular>
           </v-col>
           <v-col
-            v-for="(lang, key) in availableLanguages"
-            :key="key"
+            v-for="lang in availableLanguages"
+            :key="lang.code"
             cols="12"
             sm="6"
             md="4"
           >
             <v-item>
-              <v-card @click="chooseLanguage(key)">
+              <v-card @click="chooseLanguage(lang.code)">
                 <v-card-title class="subtitle-1 justify-space-between">
                   <span>{{ lang.name }} ({{ lang.nativeName }})</span>
 
@@ -66,7 +66,8 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      availableLanguages: {},
+      allLanguages: {},
+      availableLanguages: [],
       selectedLanguage: null,
       sortOptions: [
         {
@@ -86,7 +87,13 @@ export default {
   created() {
     this.languagesLoading = true;
     axios.get(process.env.VUE_APP_API_URL + '/languages/all').then(response => {
-      this.availableLanguages = response.data;
+      this.allLanguages = response.data;
+      for (let [key, value] of Object.entries(this.allLanguages)) {
+        let tmpValue = value;
+        tmpValue['code'] = key;
+        this.availableLanguages.push(tmpValue)
+      }
+      this.availableLanguages.sort((a, b) => a.name.localeCompare(b.name));
       this.languagesLoading = false;
     });
   },
