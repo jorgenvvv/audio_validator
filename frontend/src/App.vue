@@ -7,6 +7,16 @@
         </router-link>
       </v-toolbar-title>
       <v-spacer></v-spacer>
+      <span class="mr-3 text-uppercase">
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn text icon v-on="on" @click="openValidationHelpDialog()">
+              <v-icon>mdi-help-circle-outline</v-icon>
+            </v-btn>
+          </template>
+          <span>Validation Instructions</span>
+        </v-tooltip>
+      </span>
       <span class="mr-3 text-uppercase" v-if="$route.params.lang">
         <v-icon>mdi-web</v-icon>
         {{ $route.params.lang }}
@@ -22,6 +32,8 @@
       </span>
     </v-app-bar>
 
+    <validation-help-dialog></validation-help-dialog>
+
     <v-content>
       <router-view></router-view>
     </v-content>
@@ -31,9 +43,13 @@
 <script>
 import axios from 'axios';
 import { store } from './store.js';
+import ValidationHelpDialog from './components/ValidationHelpDialog';
 
 export default {
   name: 'App',
+  components: {
+    ValidationHelpDialog
+  },
   data() {
     return {
       dialog: false,
@@ -58,6 +74,10 @@ export default {
         store.setUserInfo({});
         this.$router.push('/');
       });
+    },
+
+    openValidationHelpDialog() {
+      store.setHelpModalVisibility(true);
     }
   }
 };

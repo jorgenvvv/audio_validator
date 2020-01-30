@@ -1,6 +1,52 @@
 <template>
   <v-container>
-    <v-card class="pa-2 mb-2" v-if="currentLanguage.name">
+    <v-expansion-panels class="mb-2">
+      <v-expansion-panel>
+        <v-expansion-panel-header class="subtitle-1 font-weight-bold">
+          Validation Instructions
+        </v-expansion-panel-header>
+        <v-expansion-panel-content class="body-2">
+          <p>
+            The overall goal of the validation process is to listen to different short audio clips that (should) contain speech and try to evaluate if they are from the expected language or not.
+          </p>
+          <p>
+            To start validating choose a language that you speak from the list of <router-link to="/languages">available languages</router-link>. Then a page with short audio clips will be visible. Listen to the audio clips and choose a suitable answer / label for each clip.
+          </p>
+          <p>
+            There are three types of answers / labels
+            <ol>
+              <li><i>&lt;Expected Langugage&gt;</i> - should be selected if the clip contains speech in the language that you are validating.</li>
+              <li><i>Not &lt;Expected Language&gt;</i> - should be selected if the audio clip contains speech but it is in another language (not the language that you selected and are validating).</li>
+              <li><i>No Speech</i> - should be selected if the audio clip contains no speech. This also includes music and singing, that might be in the correct and expected language but cannot be considered as speech.</li>
+            </ol>
+          </p>
+          <p>
+            All clips on the page must be labelled and then you can press "Save". After that the answers are saved and you will be given a new set of audio clips to validate.
+          </p>
+          <div class="elevation-2 pa-2 mb-3">
+            <span class="subtitle-2">Example</span>
+            <p>
+            If the language that you chose and started validating was English then the available answers will be
+              <ol>
+                <li><i>English</i></li>
+                <li><i>Not English</i></li>
+                <li><i>No Speech</i></li>
+              </ol>
+              Only one answer can be selected per audio clip. If the short audio segment contains speech that is in English choose the first answer (<i>English</i>). If the clip contains speech in any other language than English then choose the second answer (<i>Not English</i>). Otherwise if the audio segment did not contain andy speech at all, then choose the last answer (<i>No Speech</i>). "No Speech" should also be selected if the clip contained music or singing that was in English, because here it is not considered as speech.
+              <br>
+            </p>
+            <p>
+              For all other languages the validation process is exactly the same just the "expected" language from the clips will be different.
+            </p>
+          </div>
+          <p> 
+            Thanks for contributing!
+          </p>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+    </v-expansion-panels>
+
+    <v-card class="pa-2 pl-6 mb-2" v-if="currentLanguage.name">
       <b>Selected Language</b>: {{ currentLanguage.name }} ({{ currentLanguage.nativeName }})
       <v-btn text small color="primary" @click="$router.push('/languages')">Change</v-btn>
     </v-card>
@@ -20,6 +66,7 @@
         indeterminate
       ></v-progress-circular>
     </v-overlay>
+
     <v-card class="pa-2" v-if="audioFiles.length > 0">
       <v-alert v-if="invalidFields" dense outlined type="error">
         A spoken language has to be chosen for all audio clips.

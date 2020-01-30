@@ -1,7 +1,8 @@
 export const store = {
   state: {
     isAuthenticated: false,
-    userInfo: {}
+    userInfo: {},
+    helpModalVisibility: false
   },
 
   setAuthenticated(value) {
@@ -10,5 +11,9 @@ export const store = {
 
   setUserInfo(value) {
     this.state.userInfo = value;
+  },
+
+  setHelpModalVisibility(value) {
+    this.state.helpModalVisibility = value;
   }
 };
