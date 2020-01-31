@@ -23,9 +23,7 @@ def get_all_languages():
         lang: all_languages[lang] for lang in languages_in_folder}
 
     for language in available_languages:
-        all_files = os.listdir(app.config['AUDIO_PATH'] + language)
-
-        all_audio_files_count = len(all_files)
+        all_audio_files_count = get_language_data_count(language)
 
         validated_files_count = (
             db.session.query(
@@ -48,3 +46,10 @@ def get_language_info(lang):
     language_info = app.config['ALL_LANGUAGES'][lang]
 
     return jsonify(language_info)
+
+
+def get_language_data_count(lang):
+    with open(app.config['AUDIO_STATS_FILE_PATH'], 'r') as fin:
+        data = json.load(fin)
+    
+    return data[lang]['count']

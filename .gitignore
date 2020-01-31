@@ -8,5 +8,6 @@ dist
 .vscode
 
 config.py
+audio_stats.json
 
 app.db

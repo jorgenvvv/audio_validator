@@ -44,6 +44,21 @@ def create_app():
     except OSError:
         pass
 
+    @app.before_first_request
+    def calculcate_audio_data_stats():
+        languages_in_folder = os.listdir(app.config['AUDIO_PATH'])
+
+        language_stats = {}
+
+        for language in languages_in_folder:
+            language_audio_count = len(os.listdir(
+                os.path.join(app.config['AUDIO_PATH'], language)))
+            language_count = {'count': language_audio_count}
+            language_stats[language] = language_count
+
+        with open(app.config['AUDIO_STATS_FILE_PATH'], 'w') as fout:
+            json.dump(language_stats, fout)
+
     @app.route('/', defaults={'path': '/'})
     @app.route('/<path:path>')
     def index(path):

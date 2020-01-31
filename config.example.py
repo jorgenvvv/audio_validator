@@ -40,6 +40,10 @@ class Config(object):
     # Path where audio metadata files are stored
     AUDIO_METADATA_PATH = ''
 
+    # File where audio files counts will be stored
+    # This file will be created once, when starting the app
+    AUDIO_STATS_FILE_PATH = os.path.join(basedir, 'audio_stats.json')
+
     # Path to a json file where language codes and names are stored
     # This file will be imported into app config separately
     LANGUAGES_FILE_PATH = os.path.join(basedir, 'languages.json')
