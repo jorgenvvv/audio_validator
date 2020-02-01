@@ -81,8 +81,8 @@
           @keyup.78="playNextAudio(file.file_name)"
         >
           <v-col cols="8">
-            <v-row class="pl-6 py-1" v-if="file.metadata">
-              <v-col class="pa-0">
+            <v-row class="pl-6 py-2" v-if="file.metadata">
+              <v-col>
                 <div>{{ file.metadata.title }}</div>
                 <div class="caption">
                   Segment: {{ file.file_name | getSegment }}
@@ -91,7 +91,7 @@
             </v-row>
             <v-row class="pl-6">
               <v-row>
-                <div>
+                <div class="ml-6">
                   <audio
                     controls
                     :ref="file.file_name"
@@ -277,3 +277,9 @@ export default {
   }
 };
 </script>
+<style scoped>
+audio { 
+  box-shadow: 3px 3px 10px rgba(0,0, 0, 0.4);
+  border-radius: 90px;
+}
+</style>
