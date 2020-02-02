@@ -67,7 +67,14 @@ const routes = [
       requiresAuth: true
     }
   },
-  { path: '/results', name: 'results', component: Results }
+  {
+    path: '/quick-results',
+    name: 'results',
+    component: Results,
+    meta: {
+      requiresAuth: true
+    }
+  }
 ];
 
 const router = new VueRouter({
