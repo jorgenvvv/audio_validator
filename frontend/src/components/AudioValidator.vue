@@ -279,7 +279,7 @@ export default {
 </script>
 <style scoped>
 audio { 
-  box-shadow: 3px 3px 10px rgba(0,0, 0, 0.4);
+  box-shadow: 1px 1px 3px rgba(0,0, 0, 0.4);
   border-radius: 90px;
 }
 </style>
