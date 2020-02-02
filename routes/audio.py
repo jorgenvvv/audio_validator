@@ -40,6 +40,7 @@ def get_audio(lang):
                 ValidatedAudio.created_by != claims['user']
             )
         )
+        .order_by(func.random())
         .limit(validated_limit)
     )
 
@@ -62,6 +63,8 @@ def get_audio(lang):
         metadata = get_audio_metadata(audio_file, lang)
         if metadata is not None:
             selected_audio_files.append(metadata)
+
+    random.shuffle(selected_audio_files)
 
     return jsonify(selected_audio_files)
 
