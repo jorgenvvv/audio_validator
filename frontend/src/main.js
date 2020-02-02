@@ -9,6 +9,7 @@ import axios from 'axios';
 import LanguageSelect from './components/LanguageSelect';
 import AudioValidator from './components/AudioValidator';
 import Home from './components/Home';
+import Results from './components/Results';
 
 import { store } from './store.js';
 
@@ -65,7 +66,8 @@ const routes = [
     meta: {
       requiresAuth: true
     }
-  }
+  },
+  { path: '/results', name: 'results', component: Results }
 ];
 
 const router = new VueRouter({
