@@ -17,9 +17,10 @@ export default {
       results: [],
       headers: [
         { text: 'Language', value: 'language' },
-        { text: 'Is Given Language', value: 'GIVEN_LANG' },
-        { text: 'Not Given Language', value: 'NOT_GIVEN_LANG' },
-        { text: 'No Speech  ', value: 'NO_SPEECH' }
+        { text: 'Is given language', value: 'GIVEN_LANG' },
+        { text: 'Not given language', value: 'NOT_GIVEN_LANG' },
+        { text: 'No speech', value: 'NO_SPEECH' },
+        { text: "Don't know", value: 'DO_NOT_KNOW' }
       ]
     };
   },
@@ -27,11 +28,17 @@ export default {
   created() {
     axios.get(process.env.VUE_APP_API_URL + '/results').then(response => {
       this.results = response.data;
+      const fields = ['GIVEN_LANG', 'NOT_GIVEN_LANG', 'NO_SPEECH', 'DO_NOT_KNOW'];
       this.results.map(result => {
-        const total = result.GIVEN_LANG + result.NOT_GIVEN_LANG + result.NO_SPEECH;
+        fields.forEach(field => {
+          if (!result[field]) result[field] = 0;
+        });
+        
+        const total = result.GIVEN_LANG + result.NOT_GIVEN_LANG + result.NO_SPEECH + result.DO_NOT_KNOW;
         result.GIVEN_LANG = (result.GIVEN_LANG / total * 100).toFixed(1) + '%';
         result.NOT_GIVEN_LANG = (result.NOT_GIVEN_LANG / total * 100).toFixed(1) + '%';
         result.NO_SPEECH = (result.NO_SPEECH / total * 100).toFixed(1) + '%';
+        result.DO_NOT_KNOW = (result.DO_NOT_KNOW / total * 100).toFixed(1) + '%';
       });
     });
   }

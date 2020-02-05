@@ -15,10 +15,12 @@
           <p>
             There are three types of answers / labels
             <ol>
-              <li><i>&lt;Expected Langugage&gt;</i> - should be selected if the clip contains speech in the language that you are validating.</li>
-              <li><i>Not &lt;Expected Language&gt;</i> - should be selected if the audio clip contains speech but it is in another language (not the language that you selected and are validating).</li>
-              <li><i>No Speech</i> - should be selected if the audio clip contains no speech. This also includes music and singing, that might be in the correct and expected language but cannot be considered as speech.</li>
+              <li><i>&lt;Expected langugage&gt;</i> - should be selected if the clip contains speech in the language that you are validating.</li>
+              <li><i>Not &lt;expected language&gt;</i> - should be selected if the audio clip contains speech but it is in another language (not the language that you selected and are validating).</li>
+              <li><i>No speech</i> - should be selected if the audio clip contains no speech. This also includes music and singing, that might be in the correct and expected language but cannot be considered as speech.</li>
+              <li><i>Don't know</i> - should be selected if it is not possible to understand the spoken language in the clip (for example the audio segment is very short or contains too much noise).</li>
             </ol>
+            If an audio clip contains speech in multiple languages (or music and speech in the same clip) then please try to choose an answer according to the language that has the "majority" in the clip. For example, if a clip contains a sentence Spanish and then the rest of the conversation is in English then English is the correct answer.
           </p>
           <p>
             All clips on the page must be labelled and then you can press "Save". After that the answers are saved and you will be given a new set of audio clips to validate.
@@ -30,9 +32,10 @@
               <ol>
                 <li><i>English</i></li>
                 <li><i>Not English</i></li>
-                <li><i>No Speech</i></li>
+                <li><i>No speech</i></li>
+                <li><i>Don't know</i></li>
               </ol>
-              Only one answer can be selected per audio clip. If the short audio segment contains speech that is in English choose the first answer (<i>English</i>). If the clip contains speech in any other language than English then choose the second answer (<i>Not English</i>). Otherwise if the audio segment did not contain andy speech at all, then choose the last answer (<i>No Speech</i>). "No Speech" should also be selected if the clip contained music or singing that was in English, because here it is not considered as speech.
+              Only one answer can be selected per audio clip. If the short audio segment contains speech that is in English choose the first answer (<i>English</i>). If the clip contains speech in any other language than English then choose the second answer (<i>Not English</i>). If the audio segment did not contain andy speech at all, then choose the third answer (<i>No speech</i>). "No speech" should also be selected if the clip contained music or singing that was in English, because here it is not considered as speech. And finally, if an audio clip contains spoken language, but it is not possible to understand, then choose the last answer (<i>Don't know</i>).
               <br>
             </p>
             <p>
@@ -124,7 +127,8 @@
                   :label="'Not ' + currentLanguage.name"
                   value="NOT_GIVEN_LANG"
                 ></v-radio>
-                <v-radio label="No Speech" value="NO_SPEECH"></v-radio>
+                <v-radio label="No speech" value="NO_SPEECH"></v-radio>
+                <v-radio label="Don't know" value="DO_NOT_KNOW"></v-radio>
               </v-radio-group>
             </v-row>
           </v-col>
