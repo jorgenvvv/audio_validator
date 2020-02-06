@@ -81,6 +81,7 @@ def save_validated_audio():
             file_name=audio['file_name'],
             created_at=dt.now(),
             created_by=claims['user'],
+            validator_skill_level=audio['validator_skill_level'],
             expected_language_code=audio['expected_language_code'],
             validation_value=audio['language'],
             video_id=audio['video_id'],

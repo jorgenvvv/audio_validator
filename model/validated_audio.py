@@ -17,6 +17,9 @@ class ValidatedAudio(db.Model):
     created_by = db.Column(
         db.String(100)
     )
+    validator_skill_level = db.Column(
+        db.Integer
+    )
     expected_language_code = db.Column(
         db.String(100)
     )

@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <language-skill-dialog v-if="languageSkillDialogVisible" :language="currentLanguage.name" @save="saveLanguageSkill"></language-skill-dialog>
     <v-expansion-panels class="mb-2">
       <v-expansion-panel>
         <v-expansion-panel-header class="subtitle-1 font-weight-bold">
@@ -153,21 +154,28 @@
 
 <script>
 import axios from 'axios';
+import LanguageSkillDialog from './LanguageSkillDialog';
 
 export default {
+  components: {
+    LanguageSkillDialog
+  },
+
   data() {
     return {
       audioFiles: [],
       invalidFields: false,
       currentLanguage: {},
       snackbar: false,
-      loading: false
+      loading: false,
+      languageSkillDialogVisible: false,
+      userLanguageSkill: null,
     };
   },
 
   created() {
     this.loading = true;
-    axios.all([this.loadAudio(), this.loadCurrentLanguage()]).then(() => {
+    axios.all([this.loadAudio(), this.loadCurrentLanguage(), this.loadUserLanguageSkill()]).then(() => {
       this.loading = false;
     });
   },
@@ -216,6 +224,19 @@ export default {
         });
     },
 
+    loadUserLanguageSkill() {
+      return axios
+        .get(
+          process.env.VUE_APP_API_URL + '/user/skill/' + this.$route.params.lang
+        )
+        .then(response => {
+          this.userLanguageSkill = response.data;
+          if (!this.userLanguageSkill) {
+            this.languageSkillDialogVisible = true;
+          }
+        });
+    },
+
     pauseOtherAudios(currentFile) {
       this.audioFiles.forEach(a => {
         if (a.file_name !== currentFile) this.$refs[a.file_name][0].pause();
@@ -239,12 +260,18 @@ export default {
       return allValid;
     },
 
+    saveLanguageSkill(skillLevel) {
+      this.userLanguageSkill = skillLevel;
+      this.languageSkillDialogVisible = false;
+    },
+
     saveValidatedAudio() {
       if (this.validateAnswers()) {
         this.audioFiles.forEach(f => {
           this.$set(f, 'expected_language_code', this.$route.params.lang);
           this.$set(f, 'video_id', f.metadata.id);
           this.$set(f, 'video_title', f.metadata.title);
+          this.$set(f, 'validator_skill_level', this.userLanguageSkill);
           delete f['metadata'];
         });
 
@@ -282,8 +309,8 @@ export default {
 };
 </script>
 <style scoped>
-audio { 
-  box-shadow: 1px 1px 3px rgba(0,0, 0, 0.4);
+audio {
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
   border-radius: 90px;
 }
 </style>
