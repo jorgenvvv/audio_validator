@@ -29,7 +29,7 @@ def get_user_language_skill(lang):
             and_(
                 ValidatedAudio.expected_language_code == lang,
                 ValidatedAudio.created_by == claims['user'],
-                ValidatedAudio.validator_skill_level is not None
+                ValidatedAudio.validator_skill_level.isnot(None)
             )
         ).first()
     )
