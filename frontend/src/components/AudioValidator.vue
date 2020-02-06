@@ -84,8 +84,8 @@
         <v-row
           @keyup.78="playNextAudio(file.file_name)"
         >
-          <v-col cols="8">
-            <v-row class="pl-6 py-2" v-if="file.metadata">
+          <v-col cols="12" sm="8">
+            <v-row class="pl-2 pl-sm-6 py-2" v-if="file.metadata">
               <v-col>
                 <div>{{ file.metadata.title }}</div>
                 <div class="caption">
@@ -93,7 +93,7 @@
                 </div>
               </v-col>
             </v-row>
-            <v-row class="pl-6">
+            <v-row class="pl-2 pl-sm-6">
               <v-row>
                 <div class="ml-6">
                   <audio
@@ -114,7 +114,7 @@
               </v-row>
             </v-row>
           </v-col>
-          <v-col cols="4">
+          <v-col cols="12" sm="4">
             <v-row class="ml-2">
               <v-radio-group v-model="file.language" column>
                 <template v-slot:label>

@@ -1,11 +1,16 @@
 <template>
   <v-app>
     <v-app-bar app dense>
-      <v-toolbar-title class="headline text-uppercase">
+      <v-toolbar-title class="headline text-uppercase d-none d-sm-flex">
         <router-link to="/">
           <span>Audio validator</span>
         </router-link>
       </v-toolbar-title>
+      <span class="mr-3 text-uppercase">
+        <router-link to="/">
+          <v-icon>mdi-home</v-icon>
+        </router-link>
+      </span>
       <v-spacer></v-spacer>
       <span class="mr-3 text-uppercase">
         <v-tooltip bottom>
@@ -21,7 +26,7 @@
         <v-icon>mdi-web</v-icon>
         {{ $route.params.lang }}
       </span>
-      <span class="mr-3" v-if="storeState.isAuthenticated">
+      <span class="mr-3 d-none d-sm-flex" v-if="storeState.isAuthenticated">
         <v-icon>mdi-account-circle-outline</v-icon>
         {{ storeState.userInfo.name }}
       </span>
@@ -61,7 +66,7 @@ export default {
     store.setAuthenticated(this.$auth.isAuthenticated());
 
     if (this.storeState.isAuthenticated) {
-      axios.get(process.env.VUE_APP_API_URL + '/user').then((response) => {
+      axios.get(process.env.VUE_APP_API_URL + '/user').then(response => {
         store.setUserInfo(response.data);
       });
     }
