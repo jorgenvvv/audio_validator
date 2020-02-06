@@ -6,7 +6,7 @@
           <span>Audio validator</span>
         </router-link>
       </v-toolbar-title>
-      <span class="mr-3 text-uppercase">
+      <span class="mr-3 text-uppercase hidden-sm-and-up">
         <router-link to="/">
           <v-icon>mdi-home</v-icon>
         </router-link>
