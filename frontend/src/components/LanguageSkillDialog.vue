@@ -44,6 +44,13 @@
 
       <v-card-actions>
         <v-spacer></v-spacer>
+        <router-link to="/languages">
+          <v-btn
+            text
+          >
+            Cancel
+          </v-btn>
+        </router-link>
         <v-btn
           color="primary"
           text
@@ -77,3 +84,8 @@ export default {
   }
 };
 </script>
+<style scoped>
+a {
+  text-decoration: none;
+}
+</style>
