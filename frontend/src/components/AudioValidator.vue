@@ -230,7 +230,7 @@ export default {
           process.env.VUE_APP_API_URL + '/user/skill/' + this.$route.params.lang
         )
         .then(response => {
-          this.userLanguageSkill = response.data;
+          this.userLanguageSkill = response.data.skillLevel;
           if (!this.userLanguageSkill) {
             this.languageSkillDialogVisible = true;
           }

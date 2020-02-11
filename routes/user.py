@@ -34,4 +34,11 @@ def get_user_language_skill(lang):
         ).first()
     )
 
-    return jsonify(validator_skill_level)
+    if validator_skill_level is not None:
+        validator_skill_level = validator_skill_level[0]
+
+    skill_level = {
+        'skillLevel': validator_skill_level
+    }
+
+    return jsonify(skill_level)
