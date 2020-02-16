@@ -77,6 +77,14 @@ export default {
         {
           text: 'Language - Descending',
           value: 'LANGUAGE_DESC'
+        },
+        {
+          text: 'Most Validated',
+          value: 'MOST_VALIDATED'
+        },
+        {
+          text: 'Least Validated',
+          value: 'LEAST_VALIDATED'
         }
       ],
       sortOrder: null,
@@ -113,6 +121,12 @@ export default {
 
       if (this.sortOrder === 'LANGUAGE_DESC')
         this.availableLanguages.sort((a, b) => b.name.localeCompare(a.name));
+
+      if (this.sortOrder === 'MOST_VALIDATED')
+        this.availableLanguages.sort((a, b) => b.validated - a.validated);
+
+      if (this.sortOrder === 'LEAST_VALIDATED')
+        this.availableLanguages.sort((a, b) => a.validated - b.validated);
     }
   }
 };
