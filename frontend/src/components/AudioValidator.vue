@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <language-skill-dialog v-if="languageSkillDialogVisible" :language="currentLanguage.name" @save="saveLanguageSkill"></language-skill-dialog>
-    <v-row>
+    <v-row class="no-gutters mb-2">
       <v-col cols="12">
         <v-card class="pl-2" v-if="currentLanguage.name">
           <v-row>
