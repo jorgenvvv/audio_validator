@@ -66,7 +66,6 @@ def get_user_validated_audio_count(lang):
             ValidatedAudio.file_name
         )
         .filter_by(created_by=claims['user'])
-        .distinct()
         .count()
     )
 
