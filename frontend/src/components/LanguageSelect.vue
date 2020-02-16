@@ -87,7 +87,7 @@ export default {
           value: 'LEAST_VALIDATED'
         }
       ],
-      sortOrder: null,
+      sortOrder: 'LANGUAGE_ASC',
       languagesLoading: false
     };
   },
