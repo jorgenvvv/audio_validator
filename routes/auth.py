@@ -50,6 +50,8 @@ def authenticate(provider):
         access_token = create_access_token(
             identity=user_info_request.json())
 
+        app.logger.info(f'User {user_info_request.json()} logged in')
+
         return jsonify(access_token=access_token), 200
 
     else:

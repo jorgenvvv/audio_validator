@@ -9,5 +9,6 @@ dist
 
 config.py
 audio_stats.json
+audio_validator.log
 
 app.db

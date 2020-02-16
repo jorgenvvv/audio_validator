@@ -107,6 +107,8 @@ def get_audio_metadata(audio_file, lang):
         with open(os.path.join(app.config['AUDIO_METADATA_PATH'] + lang, metadata_file_name)) as json_file:
             json_metadata = json.load(json_file)
     except OSError:
+        app.logger.error(
+            f'Error reading metadata from file {metadata_file_name}')
         return None
 
     metadata_required = ['id', 'description', 'title']

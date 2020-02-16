@@ -2,6 +2,7 @@ import json
 import os
 import random
 from json.decoder import JSONDecodeError
+from logging.config import dictConfig
 
 from flask import (Flask, jsonify, render_template, request, send_file,
                    send_from_directory)
@@ -13,9 +14,35 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 jwt = JWTManager()
 
+
 def create_app():
     from . import routes
     from .config import Config
+
+    basedir = os.path.abspath(os.path.dirname(__file__))
+
+    dictConfig({
+        'version': 1,
+        'formatters': {
+            'default': {
+                'format': '[%(asctime)s] %(levelname)s in %(module)s: %(message)s',
+            }
+        },
+        'handlers': {
+            'file.handler': {
+                'class': 'logging.handlers.RotatingFileHandler',
+                'filename': f'{basedir}/audio_validator.log',
+                'maxBytes': 10000000,
+                'backupCount': 5,
+                'level': 'DEBUG',
+                'formatter': 'default'
+            },
+        },
+        'root': {
+            'level': 'INFO',
+            'handlers': ['file.handler']
+        }
+    })
 
     app = Flask(
         __name__,
