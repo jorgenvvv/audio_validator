@@ -25,6 +25,7 @@
           <p>
             All clips on the page must be labelled and then you can press "Save". After that the answers are saved and you will be given a new set of audio clips to validate.
           </p>
+          <p>There is pretty much an unlimited amount of audio clips to validate. So you can validate as many clips as you can :).</p>
           <div class="elevation-2 pa-2 mb-3">
             <span class="subtitle-2">Example</span>
             <p>

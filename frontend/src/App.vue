@@ -39,6 +39,8 @@
 
     <validation-help-dialog></validation-help-dialog>
 
+    <leaderboard-dialog></leaderboard-dialog>
+
     <v-content>
       <router-view></router-view>
     </v-content>
@@ -49,11 +51,13 @@
 import axios from 'axios';
 import { store } from './store.js';
 import ValidationHelpDialog from './components/ValidationHelpDialog';
+import LeaderboardDialog from './components/LeaderboardDialog';
 
 export default {
   name: 'App',
   components: {
-    ValidationHelpDialog
+    ValidationHelpDialog,
+    LeaderboardDialog
   },
   data() {
     return {
