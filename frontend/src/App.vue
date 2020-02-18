@@ -39,7 +39,7 @@
 
     <validation-help-dialog></validation-help-dialog>
 
-    <leaderboard-dialog></leaderboard-dialog>
+    <leaderboard-dialog v-if="storeState.isAuthenticated"></leaderboard-dialog>
 
     <v-content>
       <router-view></router-view>
