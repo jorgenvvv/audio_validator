@@ -18,9 +18,11 @@
               <li><i>&lt;Expected langugage&gt;</i> - should be selected if the clip contains speech in the language that you are validating.</li>
               <li><i>Not &lt;expected language&gt;</i> - should be selected if the audio clip contains speech but it is in another language (not the language that you selected and are validating).</li>
               <li><i>No speech</i> - should be selected if the audio clip contains no speech. This also includes music and singing, that might be in the correct and expected language but cannot be considered as speech.</li>
-              <li><i>Don't know</i> - should be selected if it is not possible to understand the spoken language in the clip (for example the audio segment is very short or contains too much noise).</li>
+              <li><i>Don't know</i> - should be selected if it is not possible to understand the spoken language in the clip (for example the audio segment is very short or contains too much noise) or if it is just very hard to choose another answer (for example multiple languages are equally present in the audio clip).</li>
             </ol>
-            If an audio clip contains speech in multiple languages (or music and speech in the same clip) then please try to choose an answer according to the language that has the "majority" in the clip. For example, if a clip contains a sentence Spanish and then the rest of the conversation is in English then English is the correct answer.
+          </p>
+          <p>
+            If an audio clip contains speech in multiple languages (or music and speech in the same clip) then please try to choose an answer according to the language that has the "majority" in the clip. For example, if a clip contains a sentence Spanish and then the rest of the conversation is in English then English is the correct answer. If the clip contains voiced over audio and both languages are equally present then it really is hard to choose a correct answer. In these cases the "I don't know" answer should be selected.
           </p>
           <p>
             All clips on the page must be labelled and then you can press "Save". After that the answers are saved and you will be given a new set of audio clips to validate.
