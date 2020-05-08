@@ -1,8 +1,8 @@
-from flask import Blueprint
-from flask import jsonify
+from flask import Blueprint, jsonify, send_file
 from flask import current_app as app
 from flask_jwt_extended import get_jwt_claims, jwt_required
 from sqlalchemy import func
+import json
 
 from ..model.validated_audio import ValidatedAudio, db
 
@@ -92,3 +92,29 @@ def get_results():
                 r['total_validated_twice'] = r3[1] / 2
 
     return jsonify(result)
+
+
+@results.route('/export-json')
+def export_json():
+    rows = ValidatedAudio.query.all()
+
+    results = []
+    for r in rows:
+        row_dict = r._asdict()
+        results.append({
+            'id': row_dict['id'],
+            'file_name': row_dict['file_name'],
+            'validator_skill_level': row_dict['validator_skill_level'],
+            'expected_language_code': row_dict['expected_language_code'],
+            'validation_value': row_dict['validation_value'],
+            'video_id': row_dict['video_id']
+        })
+
+    data = {
+        'validation_results': results
+    }
+
+    with open('/tmp/json-export.json', 'w') as fout:
+        json.dump(data, fout)
+
+    return send_file('/tmp/json-export.json', attachment_filename='json-export.json', as_attachment=True)
