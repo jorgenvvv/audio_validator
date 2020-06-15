@@ -61,6 +61,8 @@ To build the app for production run:
 npm run build
 ```
 
+Then the built files should be placed at the root of the code in a directory named `/dist`, from where they will be served by the backend when in production.
+
 Currently the application is configured to be served on a url ending with `/lid_validate`. To change that edit the `frontend/vue.config.js` file and change the value of `"publicPath"`.
 
 In production the frontend expects the backend to be running on port 5000 by default. To change that edit the `frontend/env.production` file and change the port of `VUE_APP_API_URL`.
@@ -75,8 +77,8 @@ FLASK_ENV=development
 flask run
 ```
 
-In production something like [Waitress](https://docs.pylonsproject.org/projects/waitress/en/stable/) (as shown in the Flask [documentation](https://flask.palletsprojects.com/en/master/tutorial/deploy/))should be used. Using waitress for starting the app in production would look like:
+In production something like [Waitress](https://docs.pylonsproject.org/projects/waitress/en/stable/) (as shown in the Flask [documentation](https://flask.palletsprojects.com/en/master/tutorial/deploy/)) should be used. Using waitress for starting the app in production would look like:
 
 ```bash
-waitress-serve --call --port 5000 audio_validator:create_app'
+waitress-serve --call --port 5000 audio_validator:create_app
 ```
